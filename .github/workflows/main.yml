@@ -1,0 +1,23 @@
+name: Deployment
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    name: Deploy on push
+    runs-on: ubuntu-latest
+    steps:
+    - name: executing remote ssh commands to pull from main branch to staging
+      uses: appleboy/ssh-action@v0.1.10
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        port: ${{ secrets.PORT }}
+        script: |
+          cd public_html
+          cd save-bite/DashBoard
+          export PATH=/opt/cpanel/ea-php81/root/bin:$PATH
+          rm composer.lock
+          git pull origin main
