@@ -12,7 +12,7 @@ class ImageEncryptionService
     public function __construct(private EncodedImageRepositoryInterface $encodedImageRepository){}
 
     /**
-     * embed user's data in in image and save image
+     * embed user's data in image and save image
      * @param mixed $requestAttributeName name of image field in the request
      * @param mixed $email
      * @param mixed $password

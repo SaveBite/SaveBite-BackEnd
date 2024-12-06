@@ -15,7 +15,7 @@ class LoginAnswerSeeder extends Seeder
     {
         $arr=['tea','coffee','milk'];
         foreach ($arr as $item){
-            LoginAnswer::query()->create([
+            LoginAnswer::query()->insert([
                 'login_question_id'=>1,
                 'content'=>$item
             ]);

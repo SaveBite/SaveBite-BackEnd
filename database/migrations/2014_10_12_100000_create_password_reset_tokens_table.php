@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('email')->primary();
-            $table->string('code');
+            $table->string('email')->unique();
+            $table->integer('code');
             $table->timestamps();
         });
     }

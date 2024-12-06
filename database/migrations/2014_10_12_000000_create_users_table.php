@@ -19,13 +19,13 @@ return new class extends Migration
             $table->string('phone');
             $table->string('password');
             $table->integer('code')->nullable();
-            $table->text('fcm_token');
-            $table->string('sec_photo');
+            $table->text('fcm_token')->nullable();
+            $table->string('sec_photo')->nullable();
             $table->enum('type', UserType::values());
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->boolean('is_active')->default(true);
             $table->boolean('is_verified')->default(false);
-            $table->foreignId('login_answers_id')->references('login_answers')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('login_answer_id')->nullable()->constrained('login_answers')->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('provider')->nullable();
             $table->string('provider_id')->nullable();
             $table->timestamps();
