@@ -56,4 +56,5 @@ class User extends Authenticatable implements JWTSubject
     {
         return JWTAuth::fromUser($this);
     }
+
 }
