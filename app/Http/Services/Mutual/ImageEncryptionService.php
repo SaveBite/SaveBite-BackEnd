@@ -10,6 +10,15 @@ use Illuminate\Support\Facades\Storage;
 class ImageEncryptionService
 {
     public function __construct(private EncodedImageRepositoryInterface $encodedImageRepository){}
+
+    /**
+     * embed user's data in in image and save image
+     * @param mixed $requestAttributeName name of image field in the request
+     * @param mixed $email
+     * @param mixed $password
+     * @throws \Exception
+     * @return bool
+     */
     public function embed($requestAttributeName, $email, $password){
         $data = [
             'email' => $email,
@@ -40,7 +49,16 @@ class ImageEncryptionService
         return true;
     }
 
-    public function extract($requestAttributeName, $key){
+    /**
+     * extract the encrypted data from image
+     * @param mixed $requestAttributeName name of image field in the request
+     * @param mixed $email
+     * @throws \Exception
+     * @return array email & password
+     */
+    public function extract($requestAttributeName, $email){
+
+        $key = $this->encodedImageRepository->get('email',$email,['token']);
         $response = Http::attach(
             'image',
             file_get_contents(request()->file($requestAttributeName)->getRealPath()),
@@ -52,5 +70,7 @@ class ImageEncryptionService
             "email" => $response->json()['email'],
             "password" => $response->json()['password'],
         ];
+
     }
+
 }
