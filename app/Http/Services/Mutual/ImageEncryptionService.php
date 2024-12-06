@@ -40,7 +40,9 @@ class ImageEncryptionService
         return true;
     }
 
-    public function extract($requestAttributeName, $key){
+    public function extract($requestAttributeName, $email){
+
+        $key = $this->encodedImageRepository->get('email',$email,['token']);
         $response = Http::attach(
             'image',
             file_get_contents(request()->file($requestAttributeName)->getRealPath()),
@@ -52,5 +54,7 @@ class ImageEncryptionService
             "email" => $response->json()['email'],
             "password" => $response->json()['password'],
         ];
+
     }
+    
 }
