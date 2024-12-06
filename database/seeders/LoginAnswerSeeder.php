@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\LoginAnswer;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -12,6 +13,14 @@ class LoginAnswerSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        $arr=['tea','coffee','milk'];
+        foreach ($arr as $item){
+            LoginAnswer::query()->create([
+                'login_question_id'=>1,
+                'content'=>$item
+            ]);
+        }
+
+
     }
 }

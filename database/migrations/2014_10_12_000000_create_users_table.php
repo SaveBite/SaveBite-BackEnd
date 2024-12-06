@@ -14,17 +14,20 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('first_name');
-            $table->string('last_name');
+            $table->string('user_name');
             $table->string('email')->unique();
             $table->string('phone');
             $table->string('password');
+            $table->integer('code')->nullable();
+            $table->text('fcm_token');
             $table->string('sec_photo');
-            $table->string('image');
             $table->enum('type', UserType::values());
-            $table->boolean('is_active')->default(false);
+            $table->string('image');
+            $table->boolean('is_active')->default(true);
             $table->boolean('is_verified')->default(false);
-            $table->
+            $table->foreignId('login_answers_id')->references('login_answers')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->string('provider')->nullable();
+            $table->string('provider_id')->nullable();
             $table->timestamps();
         });
     }

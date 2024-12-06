@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('login_answers', function (Blueprint $table) {
             $table->id();
             $table->string('content');
-            $table->timestamps();
+            $table->foreignId('login_question_id')->constrained('login_questions')->cascadeOnDelete()->cascadeOnUpdate();
         });
     }
 

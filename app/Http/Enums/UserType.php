@@ -1,28 +1,22 @@
 <?php
 
 namespace App\Http\Enums;
-use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\Password;
+
 enum UserType : string
 {
     use Enumable;
-    case PHARMACY = 'pharmacy';
-    case CLIENT = 'client';
-    case PHARMACY_EMPLOYEE = 'pharmacy_employee';
-    case HOSPITAL = 'hospital';
-    case HOSPITAL_EMPLOYEE = 'hospital_employee';
-    case DOCTOR = 'doctor';
+    case USER = 'user';
+    case RESTAURANT = 'restaurant';
+    case SUPER_MARKET = 'super_market';
+
 
 
     public function t()
     {
         return match ($this) {
-            self::PHARMACY => __('dashboard.pharmacy'),
-            self::CLIENT => __('dashboard.client'),
-            self::PHARMACY_EMPLOYEE => __('dashboard.pharmacy_employee'),
-            self::HOSPITAL => __('dashboard.hospital'),
-            self::HOSPITAL_EMPLOYEE => __('dashboard.hospital_employee'),
-            self::DOCTOR => __('dashboard.doctor'),
+            self::USER => __('dashboard.user'),
+            self::RESTAURANT => __('dashboard.restaurant'),
+            self::SUPER_MARKET => __('dashboard.super_market'),
         };
     }
 }
