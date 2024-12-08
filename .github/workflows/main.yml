@@ -2,7 +2,7 @@ name: Deployment
 on:
   push:
     branches:
-      - main
+      - main2
 jobs:
   build:
     name: Deploy on push
