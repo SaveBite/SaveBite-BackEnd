@@ -4,6 +4,7 @@ namespace App\Http\Requests\Api\V1\Auth;
 
 use App\Http\Enums\QuestionAnswer;
 use App\Http\Enums\UserType;
+use App\Rules\Phone;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
@@ -27,11 +28,11 @@ class SignUpRequest extends FormRequest
     {
         return [
             'user_name' => ['required', 'string'],
-            'email' => ['required', 'email:rfc,dns'],
+            'email' => ['required', 'email:rfc,dns','confirmed'],
             'password' => [Password::min(8)->letters()->numbers()->symbols()],
-            'phone' => ['required', 'numeric', 'digits:11'],
+            'phone' => ['required', Phone::class, 'digits:11'],
             'image' => 'required|image|mimes:png,jpg,jpeg',
-            'answer' => ['required', Rule::enum(QuestionAnswer::class)],
+            'answer' => ['required', 'exists:login_answers,id'],
             'type' => ['required', Rule::enum(UserType::class)],
         ];
     }
