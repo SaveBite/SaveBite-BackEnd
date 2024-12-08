@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\LoginAnswer;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -12,6 +13,12 @@ class LoginAnswerSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        $arr=['5arbosh shay','Coffee','Mango', 'Farawla', 'Sahlab'];
+        foreach ($arr as $item){
+            LoginAnswer::query()->insert([
+                'content'=>$item
+            ]);
+        }
+
     }
 }

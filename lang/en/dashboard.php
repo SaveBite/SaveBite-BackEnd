@@ -119,6 +119,8 @@ return [
     'phone'=>'phone',
     'bank_details_file'=>'bank details file',
     'user'=>'user',
+    'restaurant'=>'Restaurant',
+    'super_market'=>'Super Market',
     'password'=>'password',
     'password_confirmation'=>'password confirmation ',
     'direct_manager_name'=>'direct manager name',
@@ -274,5 +276,5 @@ return [
     'inquiry' => 'Inquiry',
     'unapproved_purchase_order_offers' => 'Unapproved purchase orders offers',
     'suppliers' => 'Suppliers' ,
-    'turky-store' => 'Turky store' ,
+    'turky-store' => 'Save Bite' ,
 ];

@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Requests\Api\V1\Auth;
+namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SignInRequest extends FormRequest
+class UpdateStructureRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -22,8 +22,7 @@ class SignInRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required',
-            'image' => 'required|image|mimes:png,jpg,jpeg',
+            //
         ];
     }
 }

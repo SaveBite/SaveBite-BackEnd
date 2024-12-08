@@ -118,7 +118,9 @@ return [
     'fax'=>'الفاكس',
     'phone'=>'الهاتف',
     'bank_details_file'=>'ملف تفاصيل البنك',
-    'user'=>'المستخدم',
+    'user'=>'مستخدم',
+    'restaurant'=>'مطعم',
+    'super_market'=>'سوبر ماركت',
     'password'=>'كلمة المرور',
     'password_confirmation'=>'تأكيد كلمة المرور',
     'direct_manager_name'=>'اسم المدير المباشر',
@@ -275,6 +277,6 @@ return [
     'inquiry' => 'استفسار',
     'unapproved_purchase_order_offers' => 'عروض أسعار تحت المراجعة',
     'suppliers' => 'الموردين',
-    'turky-store' => 'تركي ستور' ,
+    'turky-store' => 'Save Bite' ,
 
 ];
