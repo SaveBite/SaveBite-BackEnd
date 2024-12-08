@@ -58,12 +58,14 @@ class ImageEncryptionService
      */
     public function extract($requestAttributeName, $email){
 
-        $key = $this->encodedImageRepository->get('email',$email,['token']);
-        $response = Http::attach(
+        $key = $this->encodedImageRepository->get('email',$email,['token'])->first();
+        // dd($key);
+        $response = Http::timeout(120)
+        ->attach(
             'image',
             file_get_contents(request()->file($requestAttributeName)->getRealPath()),
             request()->file($requestAttributeName)->getClientOriginalName()
-        )->post(config("imageEncryptionApi.base_url") . "extract/",["fernet_key" => $key]);
+        )->post(config("imageEncryptionApi.base_url") . "extract/",["fernet_key" => $key->token]);
         if(! $response->successful())
             throw new \Exception("Failed to send request to external api");
         return [

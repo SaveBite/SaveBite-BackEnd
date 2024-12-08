@@ -13,14 +13,12 @@ class LoginAnswerSeeder extends Seeder
      */
     public function run(): void
     {
-        $arr=['tea','coffee','milk'];
+        $arr=['5arbosh shay','Coffee','Mango', 'Farawla', 'Sahlab'];
         foreach ($arr as $item){
             LoginAnswer::query()->insert([
-                'login_question_id'=>1,
                 'content'=>$item
             ]);
         }
-
 
     }
 }

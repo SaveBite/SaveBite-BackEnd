@@ -23,7 +23,7 @@ class SignInRequest extends FormRequest
     {
         return [
             'email' => 'required',
-            'password' => 'required',
+            'image' => 'required|image|mimes:png,jpg,jpeg',
         ];
     }
 }
