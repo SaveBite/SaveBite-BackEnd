@@ -277,6 +277,6 @@ return [
     'inquiry' => 'استفسار',
     'unapproved_purchase_order_offers' => 'عروض أسعار تحت المراجعة',
     'suppliers' => 'الموردين',
-    'turky-store' => 'تركي ستور' ,
+    'turky-store' => 'Save Bite' ,
 
 ];

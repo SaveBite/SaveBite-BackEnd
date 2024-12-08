@@ -15,7 +15,7 @@ class ManagerSeeder extends Seeder
     {
         $manager=Manager::query()->create([
             'name' => 'Admin',
-            'email' => 'admin@turky-store.com',
+            'email' => 'admin@saveBite.com',
             'phone' => '+96650000000',
             'password' => '123123123'
         ]);

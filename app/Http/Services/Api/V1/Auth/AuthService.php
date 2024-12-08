@@ -20,8 +20,8 @@ abstract class AuthService extends PlatformService
 
     public function __construct(
         private readonly UserRepositoryInterface $userRepository,
-        private FileManagerService $fileManagerService,
-        private ImageEncryptionService $imageEncryptionService,
+        private readonly FileManagerService      $fileManagerService,
+        private readonly ImageEncryptionService  $imageEncryptionService,
     )
     {
     }
@@ -39,7 +39,7 @@ abstract class AuthService extends PlatformService
             return $this->responseSuccess(message: __('messages.created successfully'), data: new UserResource($user, true));
         } catch (Exception $e) {
             DB::rollBack();
-           return $e->getMessage();
+//           return $e->getMessage();
             return $this->responseFail(message: __('messages.Something went wrong'));
         }
     }

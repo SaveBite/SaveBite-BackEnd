@@ -276,5 +276,5 @@ return [
     'inquiry' => 'Inquiry',
     'unapproved_purchase_order_offers' => 'Unapproved purchase orders offers',
     'suppliers' => 'Suppliers' ,
-    'turky-store' => 'Turky store' ,
+    'turky-store' => 'Save Bite' ,
 ];
