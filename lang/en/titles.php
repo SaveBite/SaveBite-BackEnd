@@ -65,4 +65,9 @@ return [
     'TrainingBag' => 'Training Bag',
     'Banks' => 'Banks',
     'educational_stages' => 'Educational Stages' ,
+    'tea' => "5arbosh shay",
+    'mango' => "Mango",
+    'coffee' => 'Coffee',
+    'farawla' => 'Farawla',
+    'sahlab' => 'Sahlab',
 ];

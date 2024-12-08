@@ -67,5 +67,10 @@ return [
     'Inquiries' => 'استفسارات الطلاب',
     'Coupon Details' => 'تفاصيل الكوبون',
     'TrainingBag' => 'حقيبة تدريبية',
-    'Banks' => 'البنوك'
+    'Banks' => 'البنوك',
+    'tea' => "خربوش شاى",
+    'mango' => "مانجو",
+    'coffee' => 'قهوة',
+    'farawla' => 'فراولة',
+    'sahlab' => 'سحلب',
 ];

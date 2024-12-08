@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('encoded_images', function (Blueprint $table) {
+        Schema::table("encoded_images", function(Blueprint $table){
             $table->string('email')->change();
             $table->foreign('email')->references('email')->on('users')->cascadeOnDelete();
         });
@@ -22,8 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('encoded_images', function (Blueprint $table) {
-            //
-        });
+        //
     }
 };
