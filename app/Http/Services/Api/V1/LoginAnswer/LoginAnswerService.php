@@ -25,7 +25,7 @@ abstract class LoginAnswerService extends PlatformService
 
         $data =$this->answerRepository->getAll();
         return $this->responseSuccess(data: LoginAnswerResource::collection($data));
-        
+
     }
 
 }

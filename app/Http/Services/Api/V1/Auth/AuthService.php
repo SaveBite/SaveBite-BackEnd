@@ -9,10 +9,13 @@ use App\Http\Services\Mutual\FileManagerService;
 use App\Http\Services\Mutual\ImageEncryptionService;
 use App\Http\Services\PlatformService;
 use App\Http\Traits\Responser;
+use App\Mail\SendCodeMail;
 use App\Models\LoginAnswer;
+use App\Repository\OtpRepositoryInterface;
 use App\Repository\UserRepositoryInterface;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 abstract class AuthService extends PlatformService
 {
@@ -22,6 +25,7 @@ abstract class AuthService extends PlatformService
         private readonly UserRepositoryInterface $userRepository,
         private readonly FileManagerService      $fileManagerService,
         private readonly ImageEncryptionService  $imageEncryptionService,
+        private readonly OtpRepositoryInterface $otpRepository,
     )
     {
     }
@@ -34,7 +38,9 @@ abstract class AuthService extends PlatformService
             $data['sec_photo']=$this->fileManagerService->handle('image', 'Users/SecPhotos');
             // dd($data);
             $user = $this->userRepository->create($data);
+            $otp=$this->otpRepository->generateOtp($user);
             $this->imageEncryptionService->embed('image',$data['email'], $data['password']);
+            Mail::to($user->email)->send(new SendCodeMail($user,$otp->code));
             DB::commit();
             return $this->responseSuccess(message: __('messages.created successfully'), data: new UserResource($user, true));
         } catch (Exception $e) {
