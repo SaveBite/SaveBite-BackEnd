@@ -29,9 +29,9 @@ abstract class AuthService extends PlatformService
     public function signUp(SignUpRequest $request) {
         DB::beginTransaction();
         try {
-            $data = $request->except(['answer','password_confirmation']);
-            $answer = LoginAnswer::where('content', $request->answer)->first();
-            $data['login_answer_id'] = $answer->id;
+            $data = $request->except(['answer','password_confirmation','image']);
+            $data['login_answer_id'] = $request->answer;
+            $data['sec_photo']=$this->fileManagerService->handle('image', 'Users/SecPhotos');
             // dd($data);
             $user = $this->userRepository->create($data);
             $this->imageEncryptionService->embed('image',$data['email'], $data['password']);
@@ -39,7 +39,7 @@ abstract class AuthService extends PlatformService
             return $this->responseSuccess(message: __('messages.created successfully'), data: new UserResource($user, true));
         } catch (Exception $e) {
             DB::rollBack();
-//           return $e->getMessage();
+           return $e->getMessage();
             return $this->responseFail(message: __('messages.Something went wrong'));
         }
     }

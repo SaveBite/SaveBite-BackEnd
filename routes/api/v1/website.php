@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\Auth\AuthController;
+use App\Http\Controllers\Api\V1\LoginAnswer\LoginAnswerController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'auth', 'controller' => AuthController::class], function () {
@@ -9,5 +10,6 @@ Route::group(['prefix' => 'auth', 'controller' => AuthController::class], functi
         Route::post('up', 'signUp');
         Route::post('out', 'signOut');
     });
-    Route::get('what-is-my-platform', 'whatIsMyPlatform'); // returns 'platform: website!'
 });
+
+Route::get('login_answers',[LoginAnswerController::class,'index']);
