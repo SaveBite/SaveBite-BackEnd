@@ -36,11 +36,11 @@ abstract class AuthService extends PlatformService
             $data = $request->except(['answer','password_confirmation','image']);
             $data['login_answer_id'] = $request->answer;
             $data['sec_photo']=$this->fileManagerService->handle('image', 'Users/SecPhotos');
-            // dd($data);
+
             $user = $this->userRepository->create($data);
-            $otp=$this->otpRepository->generateOtp($user);
+            $this->generate($user,$request);
+
             $this->imageEncryptionService->embed('image',$data['email'], $data['password']);
-            Mail::to($user->email)->send(new SendCodeMail($user,$otp->code));
             DB::commit();
             return $this->responseSuccess(message: __('messages.created successfully'), data: new UserResource($user, true));
         } catch (Exception $e) {
@@ -67,6 +67,43 @@ abstract class AuthService extends PlatformService
     public function signOut() {
         auth('api')->logout();
         return $this->responseSuccess(message: __('messages.Successfully loggedOut'));
+    }
+
+    public function generate($user = null, $request = null)
+    {
+        if ($request && !empty($request->email)) {
+            $email = $request->email;
+        } else {
+            $email = $user ? $user->email : auth('api')->user()->email;
+        }
+
+        $otp = $this->otpRepository->generateOtp($user);
+        auth('api')->user()?->update([
+            'otp_verified' => false
+        ]);
+        Mail::to($user->email)->send(new SendCodeMail($user,$otp->code));
+        return $this->responseSuccess(message: __('messages.OTP_Is_Send'), data: OtpResource::make($otp));
+    }
+
+    public function checkOtp($request)
+    {
+        DB::beginTransaction();
+        try {
+            $data = $request->validated();
+            if (!$this->otpRepository->check($data['otp'], $data['otp_token']))
+                return $this->responseFail(message: __('messages.Wrong OTP code or expired'));
+
+            auth('api')->user()?->otp()?->delete();
+            auth('api')->user()?->update([
+                'otp_verified' => true
+            ]);
+            DB::commit();
+            return $this->responseSuccess(message: __('messages.Your account has been verified successfully'));
+        } catch (\Exception $e) {
+            // return $e;
+            DB::rollBack();
+            return $this->responseFail(message: __('messages.Something went wrong'));
+        }
     }
 
 }
