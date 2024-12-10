@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Repository\Eloquent\EncodedImageRepository;
 use App\Repository\Eloquent\LoginAnswerRepository;
 use App\Repository\Eloquent\ManagerRepository;
+use App\Repository\Eloquent\OtpRepository;
 use App\Repository\Eloquent\PermissionRepository;
 use App\Repository\Eloquent\Repository;
 use App\Repository\Eloquent\RoleRepository;
@@ -13,6 +14,7 @@ use App\Repository\Eloquent\UserRepository;
 use App\Repository\EncodedImageRepositoryInterface;
 use App\Repository\LoginAnswerRepositoryInterface;
 use App\Repository\ManagerRepositoryInterface;
+use App\Repository\OtpRepositoryInterface;
 use App\Repository\PermissionRepositoryInterface;
 use App\Repository\RepositoryInterface;
 use App\Repository\RoleRepositoryInterface;
@@ -37,6 +39,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->singleton(ManagerRepositoryInterface::class, ManagerRepository::class);
         $this->app->singleton(EncodedImageRepositoryInterface::class, EncodedImageRepository::class);
         $this->app->singleton(LoginAnswerRepositoryInterface::class, LoginAnswerRepository::class);
+        $this->app->singleton(OtpRepositoryInterface::class, OtpRepository::class);
 
     }
 

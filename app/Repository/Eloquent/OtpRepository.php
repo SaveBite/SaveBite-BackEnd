@@ -34,7 +34,6 @@ class OtpRepository extends Repository implements OtpRepositoryInterface
     public function check($otp, $token)
     {
         return $this->model::query()
-            ->where('user_id', auth('api')->id())
             ->where('otp', $otp)
             ->where('token', $token)
             ->where('expire_at', '>', Carbon::now())

@@ -31,6 +31,7 @@ class ImageEncryptionService
             request()->file($requestAttributeName)->getClientOriginalName(),
         )->post(config('imageEncryptionApi.base_url') . 'embed/', $data);
 
+
         if(! $response->successful())
             throw new \Exception("Failed to send request to external api");
 
@@ -70,6 +71,8 @@ class ImageEncryptionService
             file_get_contents(request()->file($requestAttributeName)->getRealPath()),
             request()->file($requestAttributeName)->getClientOriginalName()
         )->post(config("imageEncryptionApi.base_url") . "extract/",["fernet_key" => $key->token]);
+
+//        dd($response);
         if(! $response->successful())
             throw new \Exception("Failed to send request to external api");
         return [

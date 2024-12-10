@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\V1\Auth\AuthController;
+use App\Http\Controllers\Api\V1\Auth\OtpController;
+use App\Http\Controllers\Api\V1\Auth\PasswordController;
 use App\Http\Controllers\Api\V1\LoginAnswer\LoginAnswerController;
 use Illuminate\Support\Facades\Route;
 
@@ -10,6 +12,16 @@ Route::group(['prefix' => 'auth', 'controller' => AuthController::class], functi
         Route::post('up', 'signUp');
         Route::post('out', 'signOut');
     });
-});
 
+});
+Route::group(['prefix' => 'otp','controller' => OtpController::class], function () {
+    Route::get('/', 'send');
+    Route::post('/verify', 'verify');
+});
 Route::get('login_answers',[LoginAnswerController::class,'index']);
+
+Route::group(['controller' => PasswordController::class], function () {
+    Route::post('forget-password','forgetPassword');
+    Route::post('forget-password-check-code','checkCode');
+    Route::post('reset-password','resetPassword');
+});

@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('phone');
             $table->string('password');
             $table->text('fcm_token')->nullable();
-            $table->string('sec_photo')->nullable();
             $table->enum('type', UserType::values());
             $table->string('image')->nullable();
             $table->boolean('is_active')->default(true);
