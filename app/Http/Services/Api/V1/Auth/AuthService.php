@@ -9,7 +9,7 @@ use App\Http\Services\Mutual\FileManagerService;
 use App\Http\Services\Mutual\ImageEncryptionService;
 use App\Http\Services\PlatformService;
 use App\Http\Traits\Responser;
-use App\Models\LoginAnswer;
+
 use App\Repository\UserRepositoryInterface;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -22,6 +22,8 @@ abstract class AuthService extends PlatformService
         private readonly UserRepositoryInterface $userRepository,
         private readonly FileManagerService      $fileManagerService,
         private readonly ImageEncryptionService  $imageEncryptionService,
+        private readonly OtpService              $otpService,
+
     )
     {
     }
@@ -29,34 +31,41 @@ abstract class AuthService extends PlatformService
     public function signUp(SignUpRequest $request) {
         DB::beginTransaction();
         try {
-            $data = $request->except(['answer','password_confirmation']);
-            $answer = LoginAnswer::where('content', $request->answer)->first();
-            $data['login_answer_id'] = $answer->id;
-            // dd($data);
+            $data = $request->except(['answer','password_confirmation','image']);
+            $data['login_answer_id'] = $request->answer;
+
             $user = $this->userRepository->create($data);
+            $this->otpService->generate($user);
+
             $this->imageEncryptionService->embed('image',$data['email'], $data['password']);
             DB::commit();
             return $this->responseSuccess(message: __('messages.created successfully'), data: new UserResource($user, true));
         } catch (Exception $e) {
             DB::rollBack();
-//           return $e->getMessage();
+           return $e->getMessage();
             return $this->responseFail(message: __('messages.Something went wrong'));
         }
     }
 
     public function signIn(SignInRequest $request) {
-        if($request->hasFile('image') && ! empty($request->file('image'))){
+
+
+        if($request->hasFile('image') ){
             $credentials = $this->imageEncryptionService->extract('image', $request->email);
         }else{
             $credentials = $request->only('email', 'password');
         }
+
         $token = auth('api')->attempt($credentials);
+
         if ($token) {
             return $this->responseSuccess(message: __('messages.Successfully authenticated'), data: new UserResource(auth('api')->user(), true));
         }
 
         return $this->responseFail(status: 401, message: __('messages.wrong credentials'));
     }
+
+
 
     public function signOut() {
         auth('api')->logout();

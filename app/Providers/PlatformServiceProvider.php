@@ -5,6 +5,9 @@ namespace App\Providers;
 use App\Http\Services\Api\V1\Auth\AuthMobileService;
 use App\Http\Services\Api\V1\Auth\AuthService;
 use App\Http\Services\Api\V1\Auth\AuthWebService;
+use App\Http\Services\Api\V1\LoginAnswer\LoginAnswerMobileService;
+use App\Http\Services\Api\V1\LoginAnswer\LoginAnswerService;
+use App\Http\Services\Api\V1\LoginAnswer\LoginAnswerWebService;
 use Illuminate\Support\ServiceProvider;
 
 class PlatformServiceProvider extends ServiceProvider
@@ -18,6 +21,10 @@ class PlatformServiceProvider extends ServiceProvider
             AuthService::class => [
                 AuthWebService::class,
                 AuthMobileService::class
+            ],
+            LoginAnswerService::class=>[
+                LoginAnswerWebService::class,
+                LoginAnswerMobileService::class,
             ]
         ],
     ];

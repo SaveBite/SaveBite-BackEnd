@@ -21,6 +21,8 @@ class UserResource extends JsonResource
         return [
             'name' => $this->user_name,
             'email' => $this->email,
+            'otp_token' => $this->whenNotNull($this->otp?->token),
+            'is_verified' => $this->whenNotNull($this->is_verified),
             'token' => $this->when($this->withToken, $this->token()),
         ];
     }
