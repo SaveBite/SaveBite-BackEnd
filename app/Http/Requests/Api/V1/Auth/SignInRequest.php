@@ -25,7 +25,7 @@ class SignInRequest extends FormRequest
         return [
             'email' => 'required|exists:users,email',
             'password' => [Password::min(8)->letters()->numbers()->symbols(),'confirmed'],
-            'image' => 'required|image|mimes:png,jpg,jpeg',
+            'image' => 'nullable|image|mimes:png,jpg,jpeg',
         ];
     }
 }
