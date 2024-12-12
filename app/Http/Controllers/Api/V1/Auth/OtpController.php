@@ -18,7 +18,7 @@ class OtpController extends Controller
 
     public function send(Request $request)
     {
-        return $this->otpService->generate( $request);
+        return $this->otpService->generate(request:  $request);
     }
     public function verify(OtpVerifyRequest $request)
     {

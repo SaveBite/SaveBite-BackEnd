@@ -62,6 +62,7 @@ return [
     'request_status_changed' => 'تم تغيير حالة طلب الطباعة بنجاح.',
     'PaymentMethod confirmed successfully' => 'تم تأكيد عملية الدفع بنجاح.',
     'wrong credentials' => 'بيانات خاطئة',
+    'verify_your_email_first'=>'برجاء تفعيل الايميل اولا',
     'Password Incorrect' => 'كلمة المرور القديمة خاطئة',
     'Exam Started Successfully' => 'تم بدء الاختبار بنجاح.',
     'You are not authorized to start this exam' => 'غير مصرح لك ببدأ هذا الاختبار في الوقت الحالي.',
