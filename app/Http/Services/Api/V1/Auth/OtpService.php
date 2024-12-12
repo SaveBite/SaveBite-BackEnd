@@ -5,6 +5,7 @@ namespace App\Http\Services\Api\V1\Auth;
 use App\Http\Resources\V1\Otp\OtpResource;
 use App\Http\Traits\Responser;
 use App\Mail\SendCodeMail;
+use App\Models\User;
 use App\Repository\OtpRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -20,13 +21,20 @@ class OtpService
 
     }
 
-    public function generate($user)
+    public function generate($user=null,$request=null)
     {
+//        dd($request->email);
+        if ($request && !empty($request->email)) {
+            $email = $request->email;
+            $user=User::where('email',$request->email)->first();
+        } else {
+            $email = $user ? $user->email : auth('api')->user()->email;
+        }
         $otp = $this->otpRepository->generateOtp($user);
         auth('api')->user()?->update([
-            'otp_verified' => false
+            'is_verified' => false
         ]);
-        Mail::to($user->email)->send(new SendCodeMail($user,$otp->otp));
+        Mail::to($email)->send(new SendCodeMail($user,$otp->otp));
         return $this->responseSuccess(message: __('messages.OTP_Is_Send'), data: OtpResource::make($otp));
     }
 
@@ -40,7 +48,7 @@ class OtpService
 
             auth('api')->user()?->otp()?->delete();
             auth('api')->user()?->update([
-                'otp_verified' => true
+                'is_verified' => true
             ]);
             DB::commit();
             return $this->responseSuccess(message: __('messages.Your account has been verified successfully'));

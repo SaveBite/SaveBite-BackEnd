@@ -4,12 +4,14 @@ namespace App\Http\Services\Api\V1\Auth;
 
 use App\Http\Requests\Api\V1\Auth\SignInRequest;
 use App\Http\Requests\Api\V1\Auth\SignUpRequest;
+use App\Http\Resources\V1\Otp\OtpResource;
 use App\Http\Resources\V1\User\UserResource;
 use App\Http\Services\Mutual\FileManagerService;
 use App\Http\Services\Mutual\ImageEncryptionService;
 use App\Http\Services\PlatformService;
 use App\Http\Traits\Responser;
 
+use App\Repository\OtpRepositoryInterface;
 use App\Repository\UserRepositoryInterface;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -24,6 +26,7 @@ abstract class AuthService extends PlatformService
         private readonly FileManagerService      $fileManagerService,
         private readonly ImageEncryptionService  $imageEncryptionService,
         private readonly OtpService              $otpService,
+        private readonly OtpRepositoryInterface $otpRepository,
 
     )
     {
@@ -64,6 +67,11 @@ abstract class AuthService extends PlatformService
 
 
         if ($token) {
+            if(!auth('api')->user()->is_verified){
+                $otp = $this->otpService->generate(auth('api')->user());
+                return $this->responseFail(status: 401, message: __('messages.verify_your_email_first'),data:$otp);
+
+            }
             return $this->responseSuccess(message: __('messages.Successfully authenticated'), data: new UserResource(auth('api')->user(), true));
         }
 

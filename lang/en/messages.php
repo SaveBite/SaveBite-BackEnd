@@ -71,6 +71,7 @@ return [
     'You are not authorized to show this exam' => 'You are not authorized to show this exam.',
     'already subscribed' => 'Already Subscribed',
     'Added To Cart' => 'Added To Cart',
+    'verify_your_email_first'=>'Verify Your Email First',
     'Phone is not valid' => 'Phone is not valid.',
     'Your profile updated successfully' => 'Your profile updated successfully.',
     'result_of_exam' => ':type result : :name',
