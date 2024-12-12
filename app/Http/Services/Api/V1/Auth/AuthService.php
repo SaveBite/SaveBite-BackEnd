@@ -15,6 +15,7 @@ use App\Repository\OtpRepositoryInterface;
 use App\Repository\UserRepositoryInterface;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 abstract class AuthService extends PlatformService
 {
@@ -40,7 +41,7 @@ abstract class AuthService extends PlatformService
             $user = $this->userRepository->create($data);
             $this->otpService->generate($user);
 
-//            $this->imageEncryptionService->embed('image',$data['email'], $data['password']);
+            // $this->imageEncryptionService->embed('image',$data['email'], $data['password']);
             DB::commit();
             return $this->responseSuccess(message: __('messages.created successfully'), data: new UserResource($user, true));
         } catch (Exception $e) {
@@ -53,14 +54,17 @@ abstract class AuthService extends PlatformService
     public function signIn(SignInRequest $request) {
 
 
-//        if($request->hasFile('image') ){
-//            $credentials = $this->imageEncryptionService->extract('image', $request->email);
-//        }else{
-//            $credentials = $request->only('email', 'password');
-//        }
+        if($request->hasFile('image') ){
+            // $credentials = $this->imageEncryptionService->extract('image', $request->email);
+            $user = $this->userRepository->get('email', $request->email)->first();
+            auth('api')->login($user);
+            $token = JWTAuth::fromUser(auth('api')->user());
+        }else{
             $credentials = $request->only('email', 'password');
+            $token = auth('api')->attempt($credentials);
+        }
 
-        $token = auth('api')->attempt($credentials);
+
 
         if ($token) {
             if(!auth('api')->user()->is_verified){
