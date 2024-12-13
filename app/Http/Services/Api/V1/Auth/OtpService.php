@@ -3,6 +3,7 @@
 namespace App\Http\Services\Api\V1\Auth;
 
 use App\Http\Resources\V1\Otp\OtpResource;
+use App\Http\Resources\V1\User\UserResource;
 use App\Http\Traits\Responser;
 use App\Mail\SendCodeMail;
 use App\Models\User;
@@ -51,7 +52,7 @@ class OtpService
                 'is_verified' => true
             ]);
             DB::commit();
-            return $this->responseSuccess(message: __('messages.Your account has been verified successfully'));
+            return $this->responseSuccess(message: __('messages.Your account has been verified successfully'),data: UserResource::make(auth('api')->user(),true));
         } catch (\Exception $e) {
             // return $e;
             DB::rollBack();
