@@ -40,7 +40,7 @@ abstract class AuthService extends PlatformService
 
             $user = $this->userRepository->create($data);
             $this->otpService->generate($user);
-
+            $user->load('otp');
             // $this->imageEncryptionService->embed('image',$data['email'], $data['password']);
             DB::commit();
             return $this->responseSuccess(message: __('messages.created successfully'), data: new UserResource($user, true));
