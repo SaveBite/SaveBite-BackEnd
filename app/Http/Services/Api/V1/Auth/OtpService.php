@@ -6,6 +6,7 @@ use App\Http\Resources\V1\Otp\OtpResource;
 use App\Http\Resources\V1\User\UserResource;
 use App\Http\Traits\Responser;
 use App\Mail\SendCodeMail;
+use App\Mail\SendLoginPhotoMail;
 use App\Models\User;
 use App\Repository\OtpRepositoryInterface;
 use Illuminate\Support\Facades\DB;
@@ -51,6 +52,8 @@ class OtpService
             auth('api')->user()?->update([
                 'is_verified' => true
             ]);
+            Mail::to(auth('api')->user()->email)->send(new SendLoginPhotoMail(auth('api')->user()));
+
             DB::commit();
             return $this->responseSuccess(message: __('messages.Your account has been verified successfully'),data: new UserResource(auth('api')->user(),true));
         } catch (\Exception $e) {
