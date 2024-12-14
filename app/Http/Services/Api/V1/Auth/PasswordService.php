@@ -8,6 +8,7 @@ use App\Http\Resources\V1\User\UserResource;
 use App\Http\Services\Mutual\GetService;
 use App\Http\Traits\Responser;
 use App\Mail\SendCodeMail;
+use App\Mail\SendLoginPhotoMail;
 use App\Repository\OtpRepositoryInterface;
 
 use App\Repository\UserRepositoryInterface;
@@ -43,7 +44,7 @@ class PasswordService
 
             $otp = $this->otpRepository->generateOtp($user);
             auth('api')->user()?->update([
-                'otp_verified' => false
+                'is_verified' => false
             ]);
             Mail::to($user->email)->send(new SendCodeMail($user,$otp->code));
 
@@ -68,8 +69,11 @@ class PasswordService
 
             auth('api')->user()?->otp()?->delete();
             auth('api')->user()?->update([
-                'otp_verified' => true
+                'is_verified' => true
             ]);
+
+            Mail::to(auth('api')->user()->email)->send(new SendLoginPhotoMail(auth('api')->user()));
+
             DB::commit();
             return $this->responseSuccess(message: __('messages.Your account has been verified successfully'));
         } catch (\Exception $e) {
@@ -85,7 +89,7 @@ class PasswordService
 
 
         $data = $request->validated();
-        if (!$data['otp_verified'])
+        if (!$data['is_verified'])
             return $this->responseFail(message: __('messages.verify otp at first'));
         $user = $this->userRepository->get('email', $data['email'])->first();
         $user = $this->userRepository->update($user['id'], ['password' => $data['new_password']]);
