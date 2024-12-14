@@ -28,7 +28,7 @@ class SendLoginPhotoMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Send Login Photo Mail',
+            subject: 'SaveBite - Login Photo Mail',
         );
     }
 

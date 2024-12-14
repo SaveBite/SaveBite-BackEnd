@@ -11,7 +11,7 @@
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
-            color: #333333;
+            color: #ffffff;
             line-height: 1.6;
         }
         .email-container {
@@ -56,10 +56,10 @@
             text-align: center;
             padding: 15px;
             font-size: 14px;
-            color: #888888;
+            color: #000000;
         }
         .email-footer a {
-            color: #128506;
+            color: #3f3e3e;
             text-decoration: none;
         }
         .email-footer a:hover {
