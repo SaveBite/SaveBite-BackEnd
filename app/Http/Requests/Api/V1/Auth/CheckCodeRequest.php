@@ -23,7 +23,8 @@ class CheckCodeRequest extends FormRequest
     {
         return [
             'email' => 'required|email|exists:users,email',
-            'code' => 'required|numeric',
+            'otp' => 'required|string',
+            'otp_token' => 'required|string',
         ];
     }
 }

@@ -24,7 +24,7 @@ class UserRepository extends Repository implements UserRepositoryInterface
         return $this->model::query()
             ->where('email',request('email'))
             ->where('login_answer_id',request('answer'))
-            ->where('is_active', true);
+            ->where('is_active', true)->first();
 
     }
 }

@@ -9,6 +9,7 @@ use App\Http\Services\Mutual\GetService;
 use App\Http\Traits\Responser;
 use App\Mail\SendCodeMail;
 use App\Mail\SendLoginPhotoMail;
+use App\Models\User;
 use App\Repository\OtpRepositoryInterface;
 
 use App\Repository\UserRepositoryInterface;
@@ -33,32 +34,24 @@ class PasswordService
     }
 
 
-    public function forgetPassword(Request $request): JsonResponse
+    public function forgetPassword(Request $request)
     {
-
-        DB::beginTransaction();
-        try {
-
-            $request->validated();
-            $user = $this->userRepository->getUserByEmailAndAnswer();
-
+        $request->validated();
+        $user = $this->userRepository->getUserByEmailAndAnswer();
+        if($user){
             $otp = $this->otpRepository->generateOtp($user);
-            auth('api')->user()?->update([
-                'is_verified' => false
-            ]);
-            Mail::to($user->email)->send(new SendCodeMail($user,$otp->code));
+            Mail::to($user->email)->send(new SendCodeMail($user,$otp->otp));
 
             DB::commit();
             return  $this->responseSuccess(message: __('messages.forget_password'), data: new OtpResource($otp));
+        }else{
 
-        } catch (\Exception $exception) {
-            DB::rollback();
             return $this->responseFail(status: 422, message: __('messages.Something went wrong'));
         }
     }
 
 
-    public function checkCode(Request $request): JsonResponse
+    public function checkCode(Request $request)
     {
 
         DB::beginTransaction();
@@ -66,7 +59,8 @@ class PasswordService
             $data = $request->validated();
             if (!$this->otpRepository->check($data['otp'], $data['otp_token']))
                 return $this->responseFail(message: __('messages.Wrong OTP code or expired'));
-
+            $user = User::where('email', $request->email)->first();
+            auth('api')->login($user);
             auth('api')->user()?->otp()?->delete();
             auth('api')->user()?->update([
                 'is_verified' => true
@@ -77,7 +71,7 @@ class PasswordService
             DB::commit();
             return $this->responseSuccess(message: __('messages.Your account has been verified successfully'));
         } catch (\Exception $e) {
-            // return $e;
+             return $e;
             DB::rollBack();
             return $this->responseFail(message: __('messages.Something went wrong'));
         }

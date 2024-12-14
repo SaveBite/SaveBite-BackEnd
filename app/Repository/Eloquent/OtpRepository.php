@@ -22,7 +22,7 @@ class OtpRepository extends Repository implements OtpRepositoryInterface
     {
         if (!$user)
             $user = auth('api')->user();
-        $user->otp?->delete();
+        $user->otp()?->delete();
         return $user->otp()?->create([
             'otp' => rand(1234, 9999),
 //            'otp' => 1111,
