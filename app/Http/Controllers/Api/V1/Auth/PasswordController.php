@@ -19,14 +19,14 @@ class PasswordController extends Controller
     {
     }
 
-    public function forgetPassword(ForgetPasswordRequest $request): JsonResponse
+    public function forgetPassword(ForgetPasswordRequest $request)
     {
 
         return  $this->PasswordService->forgetPassword($request);
     }
 
 
-    public function checkCode(CheckCodeRequest $request): JsonResponse
+    public function checkCode(CheckCodeRequest $request)
     {
 
         return  $this->PasswordService->checkCode($request);

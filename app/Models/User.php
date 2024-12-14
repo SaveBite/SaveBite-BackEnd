@@ -68,7 +68,7 @@ class User extends Authenticatable implements JWTSubject
     {
         return Attribute::make(function (){
 //            $encodedImage=$this->encodedImage()?->image;
-            $encodedImage=null;
+            $encodedImage="storage/users/photo/6CsmTojnjU1nlvkBEQcNIf3wHUjyXSval4Y1a152.jpg";
             return $encodedImage ? url($encodedImage):url($this->image);
         });
     }
