@@ -21,7 +21,7 @@ Route::group(['prefix' => 'otp','controller' => OtpController::class], function 
 Route::get('login_answers',[LoginAnswerController::class,'index']);
 
 Route::group(['controller' => PasswordController::class], function () {
-    Route::post('forget-password','forgetPassword');
-    Route::post('forget-password-check-code','checkCode');
-    Route::post('reset-password','resetPassword');
+    Route::post('lost-image','forgetPassword');
+    Route::post('lost-image-check-code','checkCode');
+//    Route::post('reset-password','resetPassword');
 });
