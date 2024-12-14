@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -63,4 +64,16 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasOne(Otp::class);
     }
 
+    public function loginPhoto():Attribute
+    {
+        return Attribute::make(function (){
+            $encodedImage=$this->encodedImage()?->image;
+            return $encodedImage ? url($encodedImage):url($this->image);
+        });
+    }
+
+    public function encodedImage()
+    {
+        return $this->hasOne(EncodedImage::class);
+    }
 }

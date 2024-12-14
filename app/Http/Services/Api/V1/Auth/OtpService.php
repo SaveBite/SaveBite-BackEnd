@@ -52,7 +52,7 @@ class OtpService
                 'is_verified' => true
             ]);
             DB::commit();
-            return $this->responseSuccess(message: __('messages.Your account has been verified successfully'),data: UserResource::make(auth('api')->user(),true));
+            return $this->responseSuccess(message: __('messages.Your account has been verified successfully'),data: new UserResource(auth('api')->user(),true));
         } catch (\Exception $e) {
             // return $e;
             DB::rollBack();
