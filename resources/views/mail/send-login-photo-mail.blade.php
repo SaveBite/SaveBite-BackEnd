@@ -56,10 +56,10 @@
             text-align: center;
             padding: 15px;
             font-size: 14px;
-            color: #888888;
+            color: #000000;
         }
         .email-footer a {
-            color: #128506;
+            color: #3f3e3e;
             text-decoration: none;
         }
         .email-footer a:hover {
@@ -74,7 +74,7 @@
     </div>
     <div class="email-body">
         <h3>Your photo for login the next time</h3>
-        <button ><a href="{{ url($user->login_photo) }}">photo here</a></button>
+        <a href="{{ url($user->login_photo) }}" download="login-photo.jpg">photo here</a>
         <div class="note">don't share the photo with others</div>
     </div>
     <div class="email-footer">

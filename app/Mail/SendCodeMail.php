@@ -29,7 +29,7 @@ class SendCodeMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Send Code Mail',
+            subject: 'SaveBite - Code Mail',
 
         );
     }
