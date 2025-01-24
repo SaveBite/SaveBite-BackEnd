@@ -14,6 +14,12 @@ class ExampleTest extends TestCase
     {
         $response = $this->get('/');
 
+        $response->assertStatus(302);
+    }
+    public function test_dashboard(){
+        $response =$this->get('en/auth/login');
+
         $response->assertStatus(200);
+
     }
 }

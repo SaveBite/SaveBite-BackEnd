@@ -28,9 +28,9 @@ class SignUpRequest extends FormRequest
     {
         return [
             'user_name' => ['required', 'string'],
-            'email' => ['required', 'email:rfc,dns'],
+            'email' => ['required', 'email:rfc,dns', 'unique:users,email'],
             'password' => [Password::min(8)->letters()->numbers()->symbols(),'confirmed'],
-            'phone' => ['required', new Phone(), 'digits:11'],
+            'phone' => ['required', new Phone(), 'digits:11','unique:users,phone'],
             'image' => 'nullable|image|mimes:png,jpg,jpeg',
             'answer' => ['required', 'exists:login_answers,id'],
             'type' => ['required', Rule::enum(UserType::class)],
