@@ -77,4 +77,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasOne(EncodedImage::class);
     }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }

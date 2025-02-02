@@ -8,6 +8,9 @@ use App\Http\Services\Api\V1\Auth\AuthWebService;
 use App\Http\Services\Api\V1\LoginAnswer\LoginAnswerMobileService;
 use App\Http\Services\Api\V1\LoginAnswer\LoginAnswerService;
 use App\Http\Services\Api\V1\LoginAnswer\LoginAnswerWebService;
+use App\Http\Services\Api\V1\Product\ProductMobileService;
+use App\Http\Services\Api\V1\Product\ProductService;
+use App\Http\Services\Api\V1\Product\ProductWebService;
 use Illuminate\Support\ServiceProvider;
 
 class PlatformServiceProvider extends ServiceProvider
@@ -25,7 +28,11 @@ class PlatformServiceProvider extends ServiceProvider
             LoginAnswerService::class=>[
                 LoginAnswerWebService::class,
                 LoginAnswerMobileService::class,
-            ]
+            ],
+            ProductService::class => [
+                ProductWebService::class,
+                ProductMobileService::class,
+            ],
         ],
     ];
     private ?int $version;
