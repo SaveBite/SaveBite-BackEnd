@@ -253,7 +253,7 @@ class CreateCrud extends Command
 
             use App\Http\Services\Api\V$apiVersion\\{$modelName}\\{$modelName}Service;
 
-            class {$modelName}WebService extends {$modelName}Service
+            class {$modelName}MobileService extends {$modelName}Service
             {
 
                 public static function platform(): string

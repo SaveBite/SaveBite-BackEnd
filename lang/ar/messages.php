@@ -174,4 +174,5 @@ return [
     'The purchase order has been created and will be published after review' => 'تم انشاء طلب الشراء وسيتم نشره بعد المراجعة.',
     'approved_successfully' => 'تم النشر بنجاح.',
     'Your inquiry has been submitted and will be published after review' => 'تم إرسال استفسارك وسيتم نشره بعد المراجعة.',
+    'file_uploaded_successfully' => 'تم رفع الملف بنجاح',
 ];
