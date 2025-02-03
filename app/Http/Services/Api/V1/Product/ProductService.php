@@ -6,8 +6,11 @@ use App\Http\Resources\V1\Product\ProductCollection;
 use App\Http\Resources\V1\Product\ProductResource;
 use App\Http\Services\Mutual\CSVFileService;
 use App\Http\Services\Mutual\FileManagerService;
+use App\Http\Services\Mutual\StockModelService;
 use App\Http\Services\PlatformService;
 use App\Http\Traits\Responser;
+use App\Jobs\UpcomingReordersJob;
+use App\Models\UpcomingReorder;
 use App\Repository\ProductRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 
@@ -16,7 +19,9 @@ abstract class ProductService extends PlatformService
     use Responser;
     public function __construct(private  readonly ProductRepositoryInterface $repository,
                                 private readonly FileManagerService $fileManagerService,
-                                private readonly CSVFileService $csvFileService){}
+                                private readonly StockModelService $stockModelService,
+                                private readonly CSVFileService $csvFileService
+                                ){}
 
 
     public function upload($request)
@@ -25,6 +30,8 @@ abstract class ProductService extends PlatformService
         $columns = ['Date','ProductName', 'Category', 'UnitPrice', 'StockQuantity' , 'ReorderLevel','ReorderQuantity', 'UnitsSold' , 'SalesValue', 'Month'];
         $check = $this->csvFileService->store($file, $columns , $this->repository);
         if ($check) {
+//            $this->stockModelService->upload($file, UpcomingReorder::query());
+            UpcomingReordersJob::dispatchAfterResponse($file);
             return $this->responseSuccess(message: __('messages.file_uploaded_successfully'));
         }else{
             return $this->responseFail(__('messages.Something went wrong'));
