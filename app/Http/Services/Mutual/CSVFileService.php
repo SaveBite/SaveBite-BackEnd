@@ -13,12 +13,10 @@ class CSVFileService
         if (($handle = fopen($file, "r")) !== false) {
             $headers = fgetcsv($handle);
         }
-
         if ($headers === false || count(array_diff($columns, $headers)) !== 0) {
             fclose($handle);
             throw ValidationException::withMessages(["message" => "file columns should be" . implode(", ", $columns)]);
         }
-
         if (auth('api')->user()->products()->exists()) {
             auth('api')->user()->products()->delete();
         }
