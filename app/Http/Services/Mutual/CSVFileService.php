@@ -10,6 +10,7 @@ class CSVFileService
     use Responser;
     public function store($file, $columns, $repository)
     {
+        $file = url($file);
         if (($handle = fopen($file, "r")) !== false) {
             $headers = fgetcsv($handle);
         }
