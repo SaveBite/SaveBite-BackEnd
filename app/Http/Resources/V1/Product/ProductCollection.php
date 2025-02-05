@@ -6,6 +6,7 @@ use App\Http\Resources\V1\PaginatorResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
+use Illuminate\Support\Str;
 use function Laravel\Prompts\search;
 
 class ProductCollection extends ResourceCollection
@@ -27,8 +28,11 @@ class ProductCollection extends ResourceCollection
             ];
         });
 
-        if(request()->filled('search')){
-            $products = $groupedProducts->where("ProductName", 'like', '%' . request('search') . '%');
+        if (request()->filled('search')) {
+            $search = request('search');
+            $products = $groupedProducts->filter(function ($item) use ($search) {
+                return Str::contains(Str::lower($item['ProductName']), Str::lower($search));
+            });
         }elseif(request()->filled('status'))
         {
             $products = match (request('status')) {
