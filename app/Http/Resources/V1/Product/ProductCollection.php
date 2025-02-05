@@ -28,7 +28,7 @@ class ProductCollection extends ResourceCollection
         });
 
         if(request()->filled('search')){
-            $products = $groupedProducts->where("ProductName", 'like', request('search'));
+            $products = $groupedProducts->where("ProductName", 'like', '%' . request('search') . '%');
         }elseif(request()->filled('status'))
         {
             $products = match (request('status')) {
