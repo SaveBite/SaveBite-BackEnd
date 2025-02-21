@@ -6,6 +6,9 @@ use App\Http\Resources\V1\PaginatorResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
+use Illuminate\Support\Str;
+use function Laravel\Prompts\search;
+
 class ProductCollection extends ResourceCollection
 {
     public function toArray(Request $request)
@@ -25,13 +28,31 @@ class ProductCollection extends ResourceCollection
             ];
         });
 
+        if (request()->filled('search')) {
+            $search = request('search');
+            $products = $groupedProducts->filter(function ($item) use ($search) {
+                return Str::contains(Str::lower($item['ProductName']), Str::lower($search));
+            });
+        }elseif(request()->filled('status'))
+        {
+            $products = match (request('status')) {
+                'PositiveStock' => $groupedProducts->where('StockQuantity', '>', 0),
+                'NegativeStock' => $groupedProducts->where('StockQuantity', '<', 0),
+                'BelowPar'      => $groupedProducts->where('StockQuantity', '<', $groupedProducts->pluck('ReorderLevel')),
+                'BelowMinimum'  => $groupedProducts->where('StockQuantity', '<', $groupedProducts->pluck('ReorderQuantity')),
+                default => collect()
+            };
+        }else{
+            $products = $groupedProducts;
+        }
+
         return [
             'StockOnHand'   => number_format($groupedProducts->sum('SalesValue'), 2) . ' EGP',
             'PositiveStock' => $groupedProducts->where('StockQuantity', '>', 0)->count(),
             'NegativeStock' => $groupedProducts->where('StockQuantity', '<', 0)->count(),
             'BelowPar'      => $groupedProducts->where('StockQuantity', '<', $groupedProducts->pluck('ReorderLevel'))->count(),
             'BelowMinimum'  => $groupedProducts->where('StockQuantity', '<', $groupedProducts->pluck('ReorderQuantity'))->count(),
-            'Products'      => ProductResource::collection($groupedProducts->values()),
+            'Products'      => ProductResource::collection($products->values()),
         ];
     }
 }
