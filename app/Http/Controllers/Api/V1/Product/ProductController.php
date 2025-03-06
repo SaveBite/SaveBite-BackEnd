@@ -21,6 +21,12 @@ class ProductController extends Controller
         return $this->productService->index();
     }
 
+
+    public function stock()
+    {
+        return $this->productService->stock();
+    }
+
     /**
      * Store a newly created resource in storage.
      */

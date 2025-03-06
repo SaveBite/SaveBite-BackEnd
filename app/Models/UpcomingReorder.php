@@ -11,4 +11,10 @@ class UpcomingReorder extends Model
 
     protected $table = 'upcoming_reorders';
     protected $guarded = [];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+    
 }

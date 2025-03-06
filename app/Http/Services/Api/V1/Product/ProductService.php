@@ -44,4 +44,25 @@ abstract class ProductService extends PlatformService
         $products = $user->products;
         return $this->responseSuccess(data: ProductCollection::make($products));
     }
+
+    public function stock()
+    {
+        $reorders = UpcomingReorder::where('user_id', auth('api')->id()) // Optional: filter by user
+        ->orderBy('Date', 'ASC')
+            ->get();
+
+
+        $grouped = $reorders->groupBy('ProductName');
+
+        // Format the response
+        $data = $grouped->map(function ($items, $productName) {
+            return [
+                'ProductName' => $productName,
+                'Category' => $items->first()->Category, // Take category from the first item
+                'ReorderQuantities' => $items->pluck('ReorderQuantity')->toArray(), // Collect all reorder quantities
+            ];
+        })->values();
+
+        return $this->responseSuccess(data: $data);
+    }
 }
