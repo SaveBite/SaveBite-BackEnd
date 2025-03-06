@@ -11,7 +11,7 @@ class StockModelService
         $response = Http::timeout(120)
         ->attach(
             'file',
-            file_get_contents($filePath),
+            file_get_contents(url($filePath)),
             "csv_file"
         )->post(config('stock_ai_model.base_url') . '/upload');
 
