@@ -31,4 +31,5 @@ Route::group(['controller' => PasswordController::class], function () {
 Route::group(['middleware' => ['auth:api']], function () {
     Route::post('products/upload', [ProductController::class, 'upload'])->name('products.upload');
     Route::get('products', [ProductController::class, 'index'])->name('products.index');
+    Route::get('stock', [ProductController::class, 'stock'])->name('products.stock');
 });
