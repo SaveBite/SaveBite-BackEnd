@@ -45,6 +45,14 @@ abstract class ProductService extends PlatformService
         return $this->responseSuccess(data: ProductCollection::make($products));
     }
 
+    public function store($request)
+    {
+        $data = $request->validated();
+        $data['user_id'] = auth('api')->id();
+        $product = $this->repository->create($data);
+        return $this->responseSuccess(data: new ProductResource($product));
+    }
+
     public function stock()
     {
         $reorders = UpcomingReorder::where('user_id', auth('api')->id()) // Optional: filter by user

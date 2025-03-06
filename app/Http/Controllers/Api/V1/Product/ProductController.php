@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Product;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\V1\Product\ProductStoreRequest;
 use App\Http\Requests\Api\V1\UploadCSVRequest;
 use App\Http\Services\Api\V1\Product\ProductService;
 use Illuminate\Http\Request;
@@ -30,9 +31,9 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProductStoreRequest $request)
     {
-        //
+        return $this->productService->store($request);
     }
 
     /**
