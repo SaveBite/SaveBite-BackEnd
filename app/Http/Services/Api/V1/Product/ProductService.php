@@ -56,6 +56,9 @@ abstract class ProductService extends PlatformService
     public function stock()
     {
         $reorders = UpcomingReorder::where('user_id', auth('api')->id()) // Optional: filter by user
+        ->when(request()->filled('search'), function($query){
+            $query->where('ProductName', 'like', '%'.request()->input('search').'%');
+        })
         ->orderBy('Date', 'ASC')
             ->get();
 
