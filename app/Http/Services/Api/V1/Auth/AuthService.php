@@ -37,8 +37,6 @@ abstract class AuthService extends PlatformService
         try {
             $data = $request->except(['answer','password_confirmation','image']);
             $data['login_answer_id'] = $request->answer;
-                //TODO we will  delete it after finish the embed function
-//            $data['image']=$this->fileManagerService->handle('image','users/photo');
             $user = $this->userRepository->create($data);
             $imageUrl = $this->imageEncryptionService->embed('image',$data['email'], $data['password']);
             $this->otpService->generate($user);
