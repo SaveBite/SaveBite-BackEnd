@@ -1,5 +1,5 @@
 <?php
 
 return [
-    "base_url" => env("IMAGE_ENCRYPTION_API_URL", "http://34.27.32.70:8000/")
+    "base_url" => env("IMAGE_ENCRYPTION_API_URL", "https://savebite-djangoapi.onrender.com")
 ];
