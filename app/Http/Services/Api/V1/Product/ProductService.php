@@ -59,10 +59,16 @@ abstract class ProductService extends PlatformService
         ->when(request()->filled('search'), function($query){
             $query->where('ProductName', 'like', '%'.request()->input('search').'%');
         })
+        ->when(request()->filled('category'), function($query){
+            $query->where('Category', request()->input('category'));
+        })
         ->orderBy('Date', 'ASC')
             ->get();
 
-
+        $startDate = UpcomingReorder::query()->where('user_id', auth('api')->id())
+            ->orderBy('Date', 'ASC')->first()->Date;
+        $endDate = UpcomingReorder::query()->where('user_id', auth('api')->id())
+            ->orderBy('Date', 'DESC')->first()->Date;
         $grouped = $reorders->groupBy('ProductName');
 
         // Format the response
@@ -73,6 +79,12 @@ abstract class ProductService extends PlatformService
                 'ReorderQuantities' => $items->pluck('ReorderQuantity')->toArray(), // Collect all reorder quantities
             ];
         })->values();
+
+        $data = [
+            'start_date' => $startDate,
+            'end_date' => $endDate,
+            'data' => $data,
+        ];
 
         return $this->responseSuccess(data: $data);
     }
