@@ -66,9 +66,9 @@ abstract class ProductService extends PlatformService
             ->get();
 
         $startDate = UpcomingReorder::query()->where('user_id', auth('api')->id())
-            ->orderBy('Date', 'ASC')->first()->Date;
+            ->orderBy('Date', 'ASC')->pluck('Date')->first();
         $endDate = UpcomingReorder::query()->where('user_id', auth('api')->id())
-            ->orderBy('Date', 'DESC')->first()->Date;
+            ->orderBy('Date', 'DESC')->pluck('Date')->first();
         $grouped = $reorders->groupBy('ProductName');
 
         // Format the response
