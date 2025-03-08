@@ -38,16 +38,16 @@ abstract class AuthService extends PlatformService
             $data = $request->except(['answer','password_confirmation','image']);
             $data['login_answer_id'] = $request->answer;
                 //TODO we will  delete it after finish the embed function
-            $data['image']=$this->fileManagerService->handle('image','users/photo');
+//            $data['image']=$this->fileManagerService->handle('image','users/photo');
             $user = $this->userRepository->create($data);
+            $imageUrl = $this->imageEncryptionService->embed('image',$data['email'], $data['password']);
             $this->otpService->generate($user);
             $user->load('otp');
-            // $this->imageEncryptionService->embed('image',$data['email'], $data['password']);
             DB::commit();
-            return $this->responseSuccess(message: __('messages.created successfully'), data: new UserResource($user, true));
+            return $this->responseSuccess(message: __('messages.created successfully'), data: new UserResource($user, true, $imageUrl));
         } catch (Exception $e) {
             DB::rollBack();
-           return $e->getMessage();
+//           return $e->getMessage();
             return $this->responseFail(message: __('messages.Something went wrong'));
         }
     }
@@ -56,10 +56,8 @@ abstract class AuthService extends PlatformService
 
 
         if($request->hasFile('image') ){
-            // $credentials = $this->imageEncryptionService->extract('image', $request->email);
-            $user = $this->userRepository->get('email', $request->email)->first();
-            auth('api')->login($user);
-            $token = JWTAuth::fromUser(auth('api')->user());
+            $credentials = $this->imageEncryptionService->extract('image', $request->email);
+            $token = auth('api')->attempt($credentials);
         }else{
             $credentials = $request->only('email', 'password');
             $token = auth('api')->attempt($credentials);

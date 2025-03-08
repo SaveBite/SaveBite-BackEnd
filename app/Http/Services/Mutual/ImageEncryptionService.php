@@ -29,12 +29,11 @@ class ImageEncryptionService
             'image',
             file_get_contents(request()->file($requestAttributeName)->getRealPath()),
             request()->file($requestAttributeName)->getClientOriginalName(),
-        )->post(config('imageEncryptionApi.base_url') . 'embed/', $data);
+        )->post(config('imageEncryptionApi.base_url') . '/embed/', $data);
 
 
         if(! $response->successful())
             throw new \Exception("Failed to send request to external api");
-
 
         $responseImage = Http::get(config("imageEncryptionApi.base_url") . $response->json()['image_url']);
         if(! $responseImage)
@@ -51,7 +50,7 @@ class ImageEncryptionService
             'token' => $response->json()['fernet_key']
         ];
         $image = $this->encodedImageRepository->create($data);
-        return true;
+        return url("storage/" . $path);
     }
 
     /**
@@ -70,7 +69,7 @@ class ImageEncryptionService
             'image',
             file_get_contents(request()->file($requestAttributeName)->getRealPath()),
             request()->file($requestAttributeName)->getClientOriginalName()
-        )->post(config("imageEncryptionApi.base_url") . "extract/",["fernet_key" => $key->token]);
+        )->post(config("imageEncryptionApi.base_url") . "/extract/",["fernet_key" => $key->token]);
 
 //        dd($response);
         if(! $response->successful())
