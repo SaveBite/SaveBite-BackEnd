@@ -15,7 +15,7 @@ class StockModelService
             file_get_contents(public_path($filePath)),
             "csv_file"
         )->post(config('stock_ai_model.base_url') . '/upload');
-        Log::info($response);
+//        Log::info($response);
         if ($response->successful()) {
             if (auth('api')->user()->upcomingReorders()->exists()) {
                 auth('api')->user()->upcomingReorders()->delete();

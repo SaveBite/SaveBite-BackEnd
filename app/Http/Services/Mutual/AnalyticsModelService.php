@@ -16,7 +16,7 @@ class AnalyticsModelService
                 'file.csv'
             )
             ->post(config('analyticsModel.base_url') . '/predict');
-        Log::info($response->body());
+//        Log::info($response->body());
         if ($response->successful()) {
             $predictions = $response->json();
             foreach ($predictions as $prediction) {
