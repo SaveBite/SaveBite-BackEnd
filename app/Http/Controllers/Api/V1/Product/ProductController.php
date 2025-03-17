@@ -64,4 +64,14 @@ class ProductController extends Controller
     {
         return $this->productService->upload($request);
     }
+
+    public function analytics()
+    {
+        return $this->productService->analytics();
+    }
+
+    public function salesPredictions()
+    {
+        return $this->productService->salesPredictions();
+    }
 }

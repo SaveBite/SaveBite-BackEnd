@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Http\Services\Mutual\AnalyticsModelService;
 use App\Http\Services\Mutual\StockModelService;
 use App\Models\UpcomingReorder;
 use Illuminate\Bus\Queueable;
@@ -26,8 +27,9 @@ class UpcomingReordersJob implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(StockModelService $stockModelService): void
+    public function handle(StockModelService $stockModelService, AnalyticsModelService $analyticsModelService): void
     {
         $stockModelService->upload($this->filePath, UpcomingReorder::query());
+        $analyticsModelService->getAnalytics($this->filePath);
     }
 }
