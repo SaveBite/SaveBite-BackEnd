@@ -2,14 +2,18 @@
 
 namespace App\Http\Services\Api\V1\Product;
 
+use App\Http\Resources\V1\Analytics\AnalyticsResource;
+use App\Http\Resources\V1\Analytics\SalesPredictionsResource;
 use App\Http\Resources\V1\Product\ProductCollection;
 use App\Http\Resources\V1\Product\ProductResource;
 use App\Http\Services\Mutual\CSVFileService;
 use App\Http\Services\Mutual\FileManagerService;
+use App\Http\Services\Mutual\GetService;
 use App\Http\Services\Mutual\StockModelService;
 use App\Http\Services\PlatformService;
 use App\Http\Traits\Responser;
 use App\Jobs\UpcomingReordersJob;
+use App\Models\AnalyticsPredictions;
 use App\Models\UpcomingReorder;
 use App\Repository\ProductRepositoryInterface;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +24,8 @@ abstract class ProductService extends PlatformService
     public function __construct(private  readonly ProductRepositoryInterface $repository,
                                 private readonly FileManagerService $fileManagerService,
                                 private readonly StockModelService $stockModelService,
-                                private readonly CSVFileService $csvFileService
+                                private readonly CSVFileService $csvFileService,
+                                private readonly GetService $getService,
                                 ){}
 
 
@@ -87,5 +92,16 @@ abstract class ProductService extends PlatformService
         ];
 
         return $this->responseSuccess(data: $data);
+    }
+
+    public function analytics()
+    {
+        return $this->getService->handle(AnalyticsResource::class, $this->repository, 'getAnalytics',is_instance: true);
+    }
+
+    public function salesPredictions()
+    {
+        $predictions = AnalyticsPredictions::where('user_id', auth('api')->id())->orderBy('Date', 'ASC')->get();
+        return $this->responseSuccess(data: SalesPredictionsResource::collection($predictions));
     }
 }

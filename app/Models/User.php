@@ -86,4 +86,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(UpcomingReorder::class);
     }
+
+    public function analyticsPredictions()
+    {
+        return $this->hasMany(AnalyticsPredictions::class);
+    }
 }

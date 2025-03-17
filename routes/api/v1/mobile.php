@@ -29,8 +29,12 @@ Route::group(['controller' => PasswordController::class], function () {
 });
 
 Route::group(['middleware' => ['auth:api']], function () {
-    Route::post('products/upload', [ProductController::class, 'upload'])->name('products.upload');
-    Route::get('products', [ProductController::class, 'index'])->name('products.index');
-    Route::post('products/', [ProductController::class, 'store'])->name('products.store');
+    Route::group(['prefix' => 'products', 'controller' => ProductController::class], function () {
+        Route::get('/', [ProductController::class, 'index'])->name('products.index');
+        Route::post('/', [ProductController::class, 'store'])->name('products.store');
+        Route::post('/upload', [ProductController::class, 'upload'])->name('products.upload');
+    });
     Route::get('stock', [ProductController::class, 'stock'])->name('products.stock');
+    Route::get('analytics', [ProductController::class, 'analytics'])->name('products.analytics');
+    Route::get('analytics/sales-predictions', [ProductController::class, 'salesPredictions'])->name('products.predections');
 });
