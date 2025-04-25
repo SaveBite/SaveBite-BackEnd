@@ -5,6 +5,9 @@ namespace App\Providers;
 use App\Http\Services\Api\V1\Auth\AuthMobileService;
 use App\Http\Services\Api\V1\Auth\AuthService;
 use App\Http\Services\Api\V1\Auth\AuthWebService;
+use App\Http\Services\Api\V1\Chat\ChatMobileService;
+use App\Http\Services\Api\V1\Chat\ChatService;
+use App\Http\Services\Api\V1\Chat\ChatWebService;
 use App\Http\Services\Api\V1\LoginAnswer\LoginAnswerMobileService;
 use App\Http\Services\Api\V1\LoginAnswer\LoginAnswerService;
 use App\Http\Services\Api\V1\LoginAnswer\LoginAnswerWebService;
@@ -33,6 +36,10 @@ class PlatformServiceProvider extends ServiceProvider
                 ProductWebService::class,
                 ProductMobileService::class,
             ],
+            ChatService::class => [
+                ChatMobileService::class,
+                ChatWebService::class,
+            ]
         ],
     ];
     private ?int $version;

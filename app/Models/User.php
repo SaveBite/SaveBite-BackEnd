@@ -54,6 +54,11 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
+    public function chat()
+    {
+        return $this->hasOne(Chat::class);
+    }
+
     public function token()
     {
         return JWTAuth::fromUser($this);

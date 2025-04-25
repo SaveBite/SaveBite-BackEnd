@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\Auth\OtpController;
 use App\Http\Controllers\Api\V1\Auth\PasswordController;
+use App\Http\Controllers\Api\V1\Chat\ChatController;
 use App\Http\Controllers\Api\V1\LoginAnswer\LoginAnswerController;
 use App\Http\Controllers\Api\V1\Product\ProductController;
 use Illuminate\Support\Facades\Route;
@@ -15,15 +16,15 @@ Route::group(['prefix' => 'auth', 'controller' => AuthController::class], functi
     });
 
 });
-Route::group(['prefix' => 'otp','controller' => OtpController::class], function () {
+Route::group(['prefix' => 'otp', 'controller' => OtpController::class], function () {
     Route::get('/', 'send');
     Route::post('/verify', 'verify');
 });
-Route::get('login_answers',[LoginAnswerController::class,'index']);
+Route::get('login_answers', [LoginAnswerController::class, 'index']);
 
 Route::group(['controller' => PasswordController::class], function () {
-    Route::post('lost-image','forgetPassword');
-    Route::post('lost-image-check-code','checkCode');
+    Route::post('lost-image', 'forgetPassword');
+    Route::post('lost-image-check-code', 'checkCode');
 //    Route::post('reset-password','resetPassword');
 });
 
@@ -33,7 +34,15 @@ Route::group(['middleware' => ['auth:api']], function () {
         Route::post('/', [ProductController::class, 'store'])->name('products.store');
         Route::post('/upload', [ProductController::class, 'upload'])->name('products.upload');
     });
-        Route::get('stock', [ProductController::class, 'stock'])->name('products.stock');
-        Route::get('analytics', [ProductController::class, 'analytics'])->name('products.analytics');
-        Route::get('analytics/sales-predictions', [ProductController::class, 'salesPredictions'])->name('products.predections');
+    Route::get('stock', [ProductController::class, 'stock'])->name('products.stock');
+    Route::get('analytics', [ProductController::class, 'analytics'])->name('products.analytics');
+    Route::get('analytics/sales-predictions',
+        [ProductController::class, 'salesPredictions'])->name('products.predections');
+
+    Route::group(['prefix' => 'chat', 'controller' => ChatController::class], function () {
+        Route::get('/', 'chatMessages');
+        Route::post('/', 'storeMessage');
+        Route::post('/add-to-favourites/{id}', 'addToFavourites');
+        Route::get('/favorites', 'favourites');
+    });
 });

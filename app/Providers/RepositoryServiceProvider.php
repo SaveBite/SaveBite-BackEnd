@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Repository\ChatMessageRepositoryInterface;
+use App\Repository\ChatRepositoryInterface;
+use App\Repository\Eloquent\ChatMessageRepository;
+use App\Repository\Eloquent\ChatRepository;
 use App\Repository\Eloquent\EncodedImageRepository;
 use App\Repository\Eloquent\LoginAnswerRepository;
 use App\Repository\Eloquent\ManagerRepository;
@@ -43,6 +47,9 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->singleton(LoginAnswerRepositoryInterface::class, LoginAnswerRepository::class);
         $this->app->singleton(OtpRepositoryInterface::class, OtpRepository::class);
         $this->app->singleton(ProductRepositoryInterface::class, ProductRepository::class);
+        $this->app->singleton(ChatRepositoryInterface::class, ChatRepository::class);
+        $this->app->singleton(ChatMessageRepositoryInterface::class, ChatMessageRepository::class);
+
 
     }
 

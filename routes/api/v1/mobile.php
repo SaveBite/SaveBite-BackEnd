@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\Auth\OtpController;
 use App\Http\Controllers\Api\V1\Auth\PasswordController;
+use App\Http\Controllers\Api\V1\Chat\ChatController;
 use App\Http\Controllers\Api\V1\LoginAnswer\LoginAnswerController;
 use App\Http\Controllers\Api\V1\Product\ProductController;
 use Illuminate\Support\Facades\Route;
@@ -37,4 +38,10 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('stock', [ProductController::class, 'stock'])->name('products.stock');
     Route::get('analytics', [ProductController::class, 'analytics'])->name('products.analytics');
     Route::get('analytics/sales-predictions', [ProductController::class, 'salesPredictions'])->name('products.predections');
+    Route::group(['prefix' => 'chat', 'controller' => ChatController::class], function () {
+        Route::get('/', 'chatMessages');
+        Route::post('/', 'storeMessage');
+        Route::post('/add-to-favourites/{id}', 'addToFavourites');
+        Route::get('/favorites', 'favourites');
+    });
 });
