@@ -59,6 +59,12 @@ abstract class ChatService extends PlatformService
         if (!$message) {
             return $this->responseFail(404, __('messages.message_not_found'));
         }
+
+        $previousMessageFound = $this->chatMessageRepository->get('message', $message->message);
+        if ($previousMessageFound && $previousMessageFound->first() && $previousMessageFound->first()->is_favorite) {
+            return $this->responseFail(422, __('messages.message_already_favourite'));
+        }
+
         $this->chatMessageRepository->update($message->id ,[
             'is_favorite' => !$message->is_favorite,
         ]);
