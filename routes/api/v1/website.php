@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\Auth\PasswordController;
 use App\Http\Controllers\Api\V1\Chat\ChatController;
 use App\Http\Controllers\Api\V1\LoginAnswer\LoginAnswerController;
 use App\Http\Controllers\Api\V1\Product\ProductController;
+use App\Http\Controllers\Api\V1\TrackingProduct\TrackingProductController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'auth', 'controller' => AuthController::class], function () {
@@ -44,5 +45,13 @@ Route::group(['middleware' => ['auth:api']], function () {
         Route::post('/', 'storeMessage');
         Route::post('/add-to-favourites/{id}', 'addToFavourites');
         Route::get('/favorites', 'favourites');
+    });
+
+    Route::group(['prefix' => 'tracking-products', 'controller' => TrackingProductController::class], function () {
+        Route::get('/', 'index')->name('tracking-products.index');
+        Route::post('/', 'store')->name('tracking-products.store');
+        Route::get('/{id}', 'show')->name('tracking-products.show');
+        Route::put('/{id}', 'update')->name('tracking-products.update');
+        Route::delete('/{id}', 'destroy')->name('tracking-products.destroy');
     });
 });
