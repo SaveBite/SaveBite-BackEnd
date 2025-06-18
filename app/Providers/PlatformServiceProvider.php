@@ -14,6 +14,8 @@ use App\Http\Services\Api\V1\LoginAnswer\LoginAnswerWebService;
 use App\Http\Services\Api\V1\Product\ProductMobileService;
 use App\Http\Services\Api\V1\Product\ProductService;
 use App\Http\Services\Api\V1\Product\ProductWebService;
+use App\Http\Services\Api\V1\TrackingProduct\TrackingProductService;
+use App\Http\Services\Api\V1\TrackingProduct\TrackingProductWebService;
 use Illuminate\Support\ServiceProvider;
 
 class PlatformServiceProvider extends ServiceProvider
@@ -39,6 +41,9 @@ class PlatformServiceProvider extends ServiceProvider
             ChatService::class => [
                 ChatMobileService::class,
                 ChatWebService::class,
+            ],
+            TrackingProductService::class => [
+                TrackingProductWebService::class,
             ]
         ],
     ];

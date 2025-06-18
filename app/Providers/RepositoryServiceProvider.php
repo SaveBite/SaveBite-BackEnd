@@ -2,31 +2,33 @@
 
 namespace App\Providers;
 
-use App\Repository\ChatMessageRepositoryInterface;
-use App\Repository\ChatRepositoryInterface;
-use App\Repository\Eloquent\ChatMessageRepository;
-use App\Repository\Eloquent\ChatRepository;
-use App\Repository\Eloquent\EncodedImageRepository;
-use App\Repository\Eloquent\LoginAnswerRepository;
-use App\Repository\Eloquent\ManagerRepository;
-use App\Repository\Eloquent\OtpRepository;
-use App\Repository\Eloquent\PermissionRepository;
-use App\Repository\Eloquent\ProductRepository;
 use App\Repository\Eloquent\Repository;
-use App\Repository\Eloquent\RoleRepository;
-use App\Repository\Eloquent\SettingsRepository;
-use App\Repository\Eloquent\UserRepository;
-use App\Repository\EncodedImageRepositoryInterface;
-use App\Repository\LoginAnswerRepositoryInterface;
-use App\Repository\ManagerRepositoryInterface;
-use App\Repository\OtpRepositoryInterface;
-use App\Repository\PermissionRepositoryInterface;
-use App\Repository\ProductRepositoryInterface;
 use App\Repository\RepositoryInterface;
-use App\Repository\RoleRepositoryInterface;
-use App\Repository\SettingsRepositoryInterface;
-use App\Repository\UserRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
+use App\Repository\Eloquent\OtpRepository;
+use App\Repository\OtpRepositoryInterface;
+use App\Repository\ChatRepositoryInterface;
+use App\Repository\Eloquent\ChatRepository;
+use App\Repository\Eloquent\RoleRepository;
+use App\Repository\Eloquent\UserRepository;
+use App\Repository\RoleRepositoryInterface;
+use App\Repository\UserRepositoryInterface;
+use App\Repository\Eloquent\ManagerRepository;
+use App\Repository\Eloquent\ProductRepository;
+use App\Repository\ManagerRepositoryInterface;
+use App\Repository\ProductRepositoryInterface;
+use App\Repository\Eloquent\SettingsRepository;
+use App\Repository\SettingsRepositoryInterface;
+use App\Repository\Eloquent\PermissionRepository;
+use App\Repository\PermissionRepositoryInterface;
+use App\Repository\ChatMessageRepositoryInterface;
+use App\Repository\Eloquent\ChatMessageRepository;
+use App\Repository\Eloquent\LoginAnswerRepository;
+use App\Repository\LoginAnswerRepositoryInterface;
+use App\Repository\Eloquent\EncodedImageRepository;
+use App\Repository\EncodedImageRepositoryInterface;
+use App\Repository\Eloquent\TrackingProductRepository;
+use App\Repository\TrackingProductRepositoryInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -49,6 +51,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->singleton(ProductRepositoryInterface::class, ProductRepository::class);
         $this->app->singleton(ChatRepositoryInterface::class, ChatRepository::class);
         $this->app->singleton(ChatMessageRepositoryInterface::class, ChatMessageRepository::class);
+        $this->app->singleton(TrackingProductRepositoryInterface::class, TrackingProductRepository::class);
 
 
     }
