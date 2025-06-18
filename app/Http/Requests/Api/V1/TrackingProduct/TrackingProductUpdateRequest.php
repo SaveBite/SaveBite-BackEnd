@@ -27,13 +27,13 @@ class TrackingProductUpdateRequest extends FormRequest
             "numberId" => [
                 'sometimes',
                 'string',
-                Rule::unique('tracking_products', 'numberId')->ignore($this->route('tracking_product'))
+                Rule::unique('tracking_products', 'numberId')->ignore($this->route('id'))
             ],
             "category" => ['sometimes', 'string'],
             "quantity" => ['sometimes', 'integer'],
             "label" => ['sometimes', 'string'],
-            "start_date" => ['sometimes', 'date_format:Y-m-d'],
-            "end_date" => ['sometimes', 'date_format:Y-m-d', 'after_or_equal:start_date'],
+            "start_date" => ['sometimes'],
+            "end_date" => ['sometimes', 'after_or_equal:start_date'],
             "status" => ['sometimes', 'string'],
         ];
     }

@@ -24,8 +24,7 @@ class TrackingProductResource extends JsonResource
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
             'status' => $this->status,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at
+            'image' => $this->image ? asset('storage/' . $this->image) : null, // Assuming image is stored in public storage
         ];
     }
 }

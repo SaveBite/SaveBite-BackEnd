@@ -27,9 +27,9 @@ class TrackingProductStoreRequest extends FormRequest
             "category" => ['required', 'string'],
             "quantity" => ['required', 'integer'],
             "label" => ['required', 'string'],
-            "start_date" => ['required', 'date_format:Y-m-d'],
-            "end_date" => ['required', 'date_format:Y-m-d', 'after_or_equal:start_date'],
-            "status" => ['required', 'string'],
+            "start_date" => ['nullable'],
+            "end_date" => ['required', 'after_or_equal:start_date'],
+            "image" => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'], 
         ];
     }
 }

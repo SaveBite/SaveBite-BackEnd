@@ -46,7 +46,7 @@ abstract class ChatService extends PlatformService
             return $this->responseSuccess(data: ChatMessageResource::make($message) );
         }catch (\Exception $exception){
             DB::rollBack();
-            dd($exception->getMessage());
+//            dd($exception->getMessage());
             return $this->responseFail(500,__('something went wrong'), );
         }
 

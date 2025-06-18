@@ -18,9 +18,12 @@ class TrackingProductRepository extends Repository implements TrackingProductRep
     public function getTrackingProducts(int $perPage, array $columns = ['*'], array $relations = [])
     {
         return $this->model->query()
+            ->when(request()->filled('status'), function($query){
+                $query->where('status', request()->status);
+            })
             ->when(request()->filled('search'), function($query){
                 $searchItem = "%" . request()->search . "%";
-                $columns = ['name', 'numberId', 'category', 'quantity', 'label', 'status'];
+                $columns = ['name', 'numberId', 'category', 'quantity', 'label'];
                 $query->where(function($query) use ($searchItem, $columns){
                     foreach ($columns as $column){
                         $query->orWhere($column, 'like', $searchItem);
