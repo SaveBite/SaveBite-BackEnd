@@ -17,7 +17,7 @@ jobs:
         port: ${{ secrets.PORT }}
         script: |
           cd public_html
-          cd save-bite/DashBoard
+          cd SaveBite-BackEnd
           export PATH=/opt/cpanel/ea-php81/root/bin:$PATH
           rm composer.lock
           git pull origin main
