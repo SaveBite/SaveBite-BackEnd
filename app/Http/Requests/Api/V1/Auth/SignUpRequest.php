@@ -31,7 +31,7 @@ class SignUpRequest extends FormRequest
             'email' => ['required', 'email:rfc,dns', 'unique:users,email'],
             'password' => [Password::min(8)->letters()->numbers()->symbols(),'confirmed','required'],
             'phone' => ['required', new Phone(), 'digits:11','unique:users,phone'],
-            'image' => 'nullable|image|mimes:png,jpg,jpeg|size:2048',
+            'image' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
             'answer' => ['required', 'exists:login_answers,id'],
             'type' => ['required', Rule::enum(UserType::class)],
         ];

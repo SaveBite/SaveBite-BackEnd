@@ -9,7 +9,7 @@ use App\Http\Controllers\Api\V1\Product\ProductController;
 use App\Http\Controllers\Api\V1\LoginAnswer\LoginAnswerController;
 use App\Http\Controllers\Api\V1\TrackingProduct\TrackingProductController;
 
-Route::group(['prefix' => 'auth', 'controller' => AuthController::class], function () {
+Route::group(['prefix' => 'auth', 'controller' => AuthController::class,'middleware' => ['throttle:5,1']], function () {
     Route::group(['prefix' => 'sign'], function () {
         Route::post('in', 'signIn');
         Route::post('up', 'signUp');
@@ -18,13 +18,13 @@ Route::group(['prefix' => 'auth', 'controller' => AuthController::class], functi
     Route::get('what-is-my-platform', 'whatIsMyPlatform'); // returns 'platform: mobile!'
 });
 
-Route::group(['prefix' => 'otp','controller' => OtpController::class], function () {
+Route::group(['prefix' => 'otp','controller' => OtpController::class,'middleware' => ['throttle:5,1']], function () {
     Route::get('/', 'send');
     Route::post('/verify', 'verify');
 });
 Route::get('login_answers',[LoginAnswerController::class,'index']);
 
-Route::group(['controller' => PasswordController::class], function () {
+Route::group(['controller' => PasswordController::class ,'middleware' => ['throttle:5,1']], function () {
     Route::post('lost-image','forgetPassword');
     Route::post('lost-image-check-code','checkCode');
 //    Route::post('reset-password','resetPassword');
