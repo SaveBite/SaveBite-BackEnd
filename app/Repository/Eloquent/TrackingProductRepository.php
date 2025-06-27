@@ -18,6 +18,7 @@ class TrackingProductRepository extends Repository implements TrackingProductRep
     public function getTrackingProducts(int $perPage, array $columns = ['*'], array $relations = [])
     {
         return $this->model->query()
+            ->where('user_id', auth('api')->id())
             ->when(request()->filled('status'), function($query){
                 $query->where('status', request()->status);
             })

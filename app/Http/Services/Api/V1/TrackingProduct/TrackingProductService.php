@@ -16,14 +16,14 @@ abstract class TrackingProductService extends PlatformService
 
     public function __construct(
         private readonly TrackingProductRepositoryInterface $repository,
-        private readonly FileManagerService $fileManagerService 
+        private readonly FileManagerService $fileManagerService
     ) {}
 
     public function index()
     {
         $perPage = request()->get('per_page', 10);
         $trackingProducts = $this->repository->getTrackingProducts($perPage);
-        return $this->responseSuccess(data: $trackingProducts);
+        return $this->responseSuccess(data: TrackingProductResource::collection($trackingProducts));
     }
 
     public function show($id)
@@ -36,12 +36,12 @@ abstract class TrackingProductService extends PlatformService
     {
         $data = $request->validated();
 
-        
+
         if ($request->hasFile('image')) {
             $data['image'] = $this->fileManagerService->handle('image', 'tracking_products');
         }
         if (isset($data['start_date'])) {
-            $startDateRaw = $data['start_date']; 
+            $startDateRaw = $data['start_date'];
             $startDate = $this->normalizeDate($startDateRaw);
 
             if (!$startDate) {
@@ -50,7 +50,7 @@ abstract class TrackingProductService extends PlatformService
             $data['start_date'] = $startDate->format('Y-m-d');
         }
 
-        $endDateRaw = $data['end_date']; 
+        $endDateRaw = $data['end_date'];
         $endDate = $this->normalizeDate($endDateRaw);
 
         if (!$endDate) {
@@ -68,7 +68,7 @@ abstract class TrackingProductService extends PlatformService
             $data['status'] = 'in-date';
         }
 
-        
+        $data['user_id'] = auth('api')->id();
         $trackingProduct = $this->repository->create($data);
 
         return $this->responseSuccess(data: new TrackingProductResource($trackingProduct));
@@ -84,7 +84,7 @@ abstract class TrackingProductService extends PlatformService
         }
 
         if (isset($data['start_date'])) {
-            $startDateRaw = $data['start_date']; 
+            $startDateRaw = $data['start_date'];
             $startDate = $this->normalizeDate($startDateRaw);
 
             if (!$startDate) {
@@ -94,7 +94,7 @@ abstract class TrackingProductService extends PlatformService
         }
 
         if (isset($data['end_date'])) {
-            $endDateRaw = $data['end_date']; 
+            $endDateRaw = $data['end_date'];
             $endDate = $this->normalizeDate($endDateRaw);
 
             if (!$endDate) {
@@ -155,6 +155,6 @@ abstract class TrackingProductService extends PlatformService
             }
         }
 
-        return null; 
+        return null;
     }
 }
