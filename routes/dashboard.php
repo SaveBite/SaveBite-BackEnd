@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group([
     'prefix' => LaravelLocalization::setLocale(),
-    'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath'],
+    'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath','throttle:5,1']
 ], function () {
     Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
         Route::get('login', [AuthController::class, '_login'])->name('_login');

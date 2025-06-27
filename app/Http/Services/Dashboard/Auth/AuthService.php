@@ -24,8 +24,7 @@ class AuthService
         return redirect()->route('auth.login');
     }
     public function updatePassword($request){
-        return $request;
-        $user=Manager::findorfail($request->id);
+        $user=Manager::findorfail(auth()->user()->id);
         if(!Hash::check($request->old_password,$user->password)){
             return back()->with('error' , __('messages.Old_Password_Wrong'));
         }else{
