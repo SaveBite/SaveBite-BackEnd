@@ -6,6 +6,7 @@ use App\Http\Helpers\Http;
 use App\Http\Traits\Responser;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -69,6 +70,13 @@ class Handler extends ExceptionHandler
                 return $this->responseFail(status: Http::UNAUTHORIZED, message: 'Unauthenticated');
             } else {
                 return redirect()->route('auth.login');
+            }
+        }
+        if ($e instanceof ThrottleRequestsException) {
+            if ($request->expectsJson()) {
+                return $this->responseFail(status: 429, message: 'Too many requests, please slow down.');
+            } else {
+                abort(429, 'Too many requests, please try again later.');
             }
         }
 

@@ -27,11 +27,11 @@ class SignUpRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_name' => ['required', 'string'],
+            'user_name' => ['required', 'string', 'max:255', 'unique:users,user_name'],
             'email' => ['required', 'email:rfc,dns', 'unique:users,email'],
-            'password' => [Password::min(8)->letters()->numbers()->symbols(),'confirmed'],
+            'password' => [Password::min(8)->letters()->numbers()->symbols(),'confirmed','required'],
             'phone' => ['required', new Phone(), 'digits:11','unique:users,phone'],
-            'image' => 'nullable|image|mimes:png,jpg,jpeg',
+            'image' => 'nullable|image|mimes:png,jpg,jpeg|size:2048',
             'answer' => ['required', 'exists:login_answers,id'],
             'type' => ['required', Rule::enum(UserType::class)],
         ];
