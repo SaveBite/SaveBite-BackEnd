@@ -29,7 +29,7 @@ Route::group(['controller' => PasswordController::class ,'middleware' => ['throt
 //    Route::post('reset-password','resetPassword');
 });
 
-Route::group(['middleware' => ['auth:api','throttle:5,1']], function () {
+Route::group(['middleware' => ['auth:api']], function () {
     Route::group(['prefix' => 'products', 'controller' => ProductController::class], function () {
         Route::get('/', [ProductController::class, 'index'])->name('products.index');
         Route::post('/', [ProductController::class, 'store'])->name('products.store');
