@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -68,12 +68,12 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasOne(Otp::class);
     }
 
-    public function loginPhoto():Attribute
+    public function loginPhoto(): Attribute
     {
-        return Attribute::make(function (){
-//            $encodedImage=$this->encodedImage()?->image;
-            $encodedImage="storage/users/photo/6CsmTojnjU1nlvkBEQcNIf3wHUjyXSval4Y1a152.jpg";
-            return $encodedImage ? url($encodedImage):url($this->image);
+        return Attribute::make(function () {
+            $encodedImage = $this->encodedImage()?->image;
+//            $encodedImage="storage/users/photo/6CsmTojnjU1nlvkBEQcNIf3wHUjyXSval4Y1a152.jpg";
+            return $encodedImage ? url($encodedImage) : null;
         });
     }
 
@@ -86,6 +86,7 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Product::class);
     }
+
     public function upcomingReorders()
     {
         return $this->hasMany(UpcomingReorder::class);

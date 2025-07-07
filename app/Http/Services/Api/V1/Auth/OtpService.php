@@ -9,6 +9,7 @@ use App\Mail\SendCodeMail;
 use App\Mail\SendLoginPhotoMail;
 use App\Models\User;
 use App\Repository\OtpRepositoryInterface;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
@@ -18,17 +19,16 @@ class OtpService
 
     public function __construct(
         private readonly OtpRepositoryInterface $otpRepository,
-    )
-    {
+    ) {
 
     }
 
-    public function generate($user=null,$request=null)
+    public function generate($user = null, $request = null)
     {
 //        dd($request->email);
         if ($request && !empty($request->email)) {
             $email = $request->email;
-            $user=User::where('email',$request->email)->first();
+            $user = User::where('email', $request->email)->first();
         } else {
             $email = $user ? $user->email : auth('api')->user()->email;
         }
@@ -36,7 +36,7 @@ class OtpService
         auth('api')->user()?->update([
             'is_verified' => false
         ]);
-        Mail::to($email)->send(new SendCodeMail($user,$otp->otp));
+        Mail::to($email)->send(new SendCodeMail($user, $otp->otp));
         return $this->responseSuccess(message: __('messages.OTP_Is_Send'), data: OtpResource::make($otp));
     }
 
@@ -45,18 +45,22 @@ class OtpService
         DB::beginTransaction();
         try {
             $data = $request->validated();
-            if (!$this->otpRepository->check($data['otp'], $data['otp_token']))
+            if (!$this->otpRepository->check($data['otp'], $data['otp_token'])) {
                 return $this->responseFail(message: __('messages.Wrong OTP code or expired'));
+            }
 
             auth('api')->user()?->otp()?->delete();
             auth('api')->user()?->update([
                 'is_verified' => true
             ]);
-            Mail::to(auth('api')->user()->email)->send(new SendLoginPhotoMail(auth('api')->user()));
+            if (auth('api')->user()->login_photo) {
+                Mail::to(auth('api')->user()->email)->send(new SendLoginPhotoMail(auth('api')->user()));
+            }
 
             DB::commit();
-            return $this->responseSuccess(message: __('messages.Your account has been verified successfully'),data: new UserResource(auth('api')->user(),true));
-        } catch (\Exception $e) {
+            return $this->responseSuccess(message: __('messages.Your account has been verified successfully'),
+                data: new UserResource(auth('api')->user(), true));
+        } catch (Exception $e) {
             // return $e;
             DB::rollBack();
             return $this->responseFail(message: __('messages.Something went wrong'));
