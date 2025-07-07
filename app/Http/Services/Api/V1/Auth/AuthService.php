@@ -63,7 +63,8 @@ abstract class AuthService extends PlatformService
 
             if ($token) {
                 if (!auth('api')->user()->is_verified) {
-                    $otp = $this->otpService->generate(auth('api')->user());
+                    $otpResponse = $this->otpService->generate(auth('api')->user());
+                    $otp = $otpResponse->getData(true);
                     return $this->responseFail(status: 401, message: __('messages.verify_your_email_first'),
                         data: $otp['data']);
 
