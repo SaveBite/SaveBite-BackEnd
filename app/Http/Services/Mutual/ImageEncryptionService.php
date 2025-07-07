@@ -66,7 +66,7 @@ class ImageEncryptionService
         $key = $this->encodedImageRepository->get('email', $email, ['token'])->first();
 
         try {
-            $response = Http::timeout(180)
+            $response = Http::timeout(20)
                 ->attach(
                     'image',
                     file_get_contents(request()->file($requestAttributeName)->getRealPath()),
