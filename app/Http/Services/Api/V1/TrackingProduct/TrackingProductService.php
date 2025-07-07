@@ -135,14 +135,15 @@ abstract class TrackingProductService extends PlatformService
     protected function normalizeDate(string $dateRaw): ?Carbon
     {
         $formats = [
-//            'Y-m-d',    // Standard format
-//            'Y/m/d',    // Standard format
-//            'd-m-Y',    // Day-Month-Year
-//            'd/m/Y',    // Day-Month-Year
-//            'm-d-Y',    // Month-Day-Year
-//            'M-y',      // Month-Year (e.g., May-23)
-//            'm/y',      // Month/Year (e.g., 05/23)
+            'Y-m-d',    // Standard format
+            'Y/m/d',    // Standard format
+            'd-m-Y',    // Day-Month-Year
+            'd/m/Y',    // Day-Month-Year
+            'm-d-Y',    // Month-Day-Year
+            'M-y',      // Month-Year (e.g., May-23)
+            'm/y',      // Month/Year (e.g., 05/23)
             'd m Y' , // Day Month Year (e.g., 01 May 2023)
+            'M/d/y', // Month/Day/Year (e.g., May/01/23)
         ];
 
         foreach ($formats as $format) {
