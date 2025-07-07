@@ -50,7 +50,7 @@ Route::group(['middleware' => ['auth:api']], function () {
         Route::get('/', 'index')->name('tracking-products.index');
         Route::post('/', 'store')->name('tracking-products.store');
         Route::get('/{id}', 'show')->name('tracking-products.show');
-        Route::put('/{id}', 'update')->name('tracking-products.update');
+        Route::post('/{id}', 'update')->name('tracking-products.update');
         Route::delete('/{id}', 'destroy')->name('tracking-products.destroy');
     });
 });
