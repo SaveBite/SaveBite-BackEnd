@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ImageEncryptionService
 {
-    public function __construct(private EncodedImageRepositoryInterface $encodedImageRepository){}
+    public function __construct(private readonly EncodedImageRepositoryInterface $encodedImageRepository){}
 
     /**
      * embed user's data in image and save image
@@ -19,7 +19,8 @@ class ImageEncryptionService
      * @throws \Exception
      * @return bool
      */
-    public function embed($requestAttributeName, $email, $password){
+    public function embed(mixed $requestAttributeName, mixed $email, mixed $password): bool
+    {
         $data = [
             'email' => $email,
             'password' => $password,
@@ -54,31 +55,45 @@ class ImageEncryptionService
     }
 
     /**
-     * extract the encrypted data from image
+     * extract the encrypted data from the image
      * @param mixed $requestAttributeName name of image field in the request
      * @param mixed $email
      * @throws \Exception
      * @return array email & password
      */
-    public function extract($requestAttributeName, $email){
+    public function extract(mixed $requestAttributeName, mixed $email)
+    {
+        $key = $this->encodedImageRepository->get('email', $email, ['token'])->first();
 
-        $key = $this->encodedImageRepository->get('email',$email,['token'])->first();
-        // dd($key);
-        $response = Http::timeout(120)
-        ->attach(
-            'image',
-            file_get_contents(request()->file($requestAttributeName)->getRealPath()),
-            request()->file($requestAttributeName)->getClientOriginalName()
-        )->post(config("imageEncryptionApi.base_url") . "/extract/",["fernet_key" => $key->token]);
+        try {
+            $response = Http::timeout(180)
+                ->attach(
+                    'image',
+                    file_get_contents(request()->file($requestAttributeName)->getRealPath()),
+                    request()->file($requestAttributeName)->getClientOriginalName()
+                )
+                ->post(config("imageEncryptionApi.base_url") . "/extract/", [
+                    "fernet_key" => $key->token
+                ]);
 
-//        dd($response);
-        if(! $response->successful())
-            throw new \Exception("Failed to send request to external api");
-        return [
-            "email" => $response->json()['email'],
-            "password" => $response->json()['password'],
-        ];
+            if (! $response->successful()) {
+                throw new \Exception("Failed to send request to external API (status code: " . $response->status() . ")");
+            }
 
+            return [
+                "email" => $response->json()['email'],
+                "password" => $response->json()['password'],
+            ];
+        }
+
+        catch (\Illuminate\Http\Client\ConnectionException $e) {
+            throw new \Exception("The image processing service is currently unavailable. Please try again later.");
+        }
+
+        catch (\Exception $e) {
+            throw new \Exception("Failed to send request to external API. Error: " . $e->getMessage());
+        }
     }
+
 
 }
