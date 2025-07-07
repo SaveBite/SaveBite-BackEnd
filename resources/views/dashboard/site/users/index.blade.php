@@ -44,7 +44,7 @@
                                 @forelse($users as $user)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $user->name }}</td>
+                                        <td>{{ $user->user_name }}</td>
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->phone }}</td>
                                       <td>

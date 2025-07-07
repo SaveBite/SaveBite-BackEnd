@@ -48,6 +48,36 @@
                         </a>
                     </li>
                 @endpermission
+                {{-- @permission('products-read') --}}
+                    <li class="nav-item  {{ in_array(request()->route()->getName(),['products.index','products.show'])? 'menu-open': '' }}">
+                        <a href="{{ route('products.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-circle"></i>
+                            <p>
+                                @lang('dashboard.products')
+                            </p>
+                        </a>
+                    </li>
+                {{-- @endpermission --}}
+                {{-- @permission('upcomingreorders-read') --}}
+                    <li class="nav-item  {{ in_array(request()->route()->getName(),['upcomingreorders.index','upcomingreorders.show'])? 'menu-open': '' }}">
+                        <a href="{{ route('upcomingreorders.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-circle"></i>
+                            <p>
+                                @lang('dashboard.upcomingreorders')
+                            </p>
+                        </a>
+                    </li>
+                {{-- @endpermission --}}
+                {{-- @permission('trackingproducts-read') --}}
+                    <li class="nav-item  {{ in_array(request()->route()->getName(),['trackingproducts.index','trackingproducts.show'])? 'menu-open': '' }}">
+                        <a href="{{ route('trackingproducts.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-circle"></i>
+                            <p>
+                                @lang('dashboard.trackingproducts')
+                            </p>
+                        </a>
+                    </li>
+                {{-- @endpermission --}}
                 <li
                     class="nav-item  {{ in_array(request()->route()->getName(),['settings.edit'])? 'menu-open': '' }} {{ Route::currentRouteName()=='settings.edit'?'activeNav':'' }}">
                     <a href="{{ route('settings.edit', auth()->user()->id) }}" class="nav-link">

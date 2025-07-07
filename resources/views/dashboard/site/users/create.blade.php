@@ -38,7 +38,7 @@
                                     <div class="col-6">
                                         <div class="form-group">
                                             <label for="exampleInputName1">@lang('dashboard.Name')</label>
-                                            <input name="name" type="text" class="form-control"
+                                            <input name="user_name" type="text" class="form-control"
                                                    id="exampleInputName1"
                                                    value="{{ old('name') }}" placeholder="" required>
                                         </div>

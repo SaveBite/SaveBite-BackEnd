@@ -40,7 +40,7 @@
                                             <label for="exampleInputName1">@lang('dashboard.Name')</label>
                                             <input name="name" type="text" class="form-control"
                                                    id="exampleInputName1"
-                                                   value="{{$user->name }}" placeholder="" required>
+                                                   value="{{$user->user_name }}" placeholder="" required>
                                         </div>
                                     </div>
                                     @error('name')

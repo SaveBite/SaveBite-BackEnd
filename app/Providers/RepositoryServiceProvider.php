@@ -28,7 +28,9 @@ use App\Repository\LoginAnswerRepositoryInterface;
 use App\Repository\Eloquent\EncodedImageRepository;
 use App\Repository\EncodedImageRepositoryInterface;
 use App\Repository\Eloquent\TrackingProductRepository;
+use App\Repository\Eloquent\UpcomingReorderRepository;
 use App\Repository\TrackingProductRepositoryInterface;
+use App\Repository\UpcomingReorderRepositoryInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -52,6 +54,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->singleton(ChatRepositoryInterface::class, ChatRepository::class);
         $this->app->singleton(ChatMessageRepositoryInterface::class, ChatMessageRepository::class);
         $this->app->singleton(TrackingProductRepositoryInterface::class, TrackingProductRepository::class);
+        $this->app->singleton(UpcomingReorderRepositoryInterface::class, UpcomingReorderRepository::class);
 
 
     }

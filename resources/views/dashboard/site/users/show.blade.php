@@ -47,10 +47,10 @@
                                     <div class="table-responsive">
                                         <table class="table">
                                             <tbody>
-                                            @isset($user->name)
+                                            @isset($user->user_name)
                                             <tr>
                                                 <th style="width:50%">@lang('dashboard.Name'):</th>
-                                                <td>{{$user->name}}</td>
+                                                <td>{{$user->user_name}}</td>
                                             </tr>
                                             @endisset
                                             @isset($user->company)

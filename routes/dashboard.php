@@ -24,6 +24,9 @@ Route::group([
     Route::group(['middleware' => 'auth'], function () {
         Route::get('/', [HomeController::class, 'index'])->name('/');
         Route::resource('users', UserController::class);
+        Route::resource('products', \App\Http\Controllers\Dashboard\Product\ProductController::class)->only(['index', 'show', 'destroy']);
+        Route::resource('upcomingreorders', \App\Http\Controllers\Dashboard\UpcomingReorder\UpcomingReorderController::class)->only(['index', 'show', 'destroy']);
+        Route::resource('trackingproducts', \App\Http\Controllers\Dashboard\TrackingProduct\TrackingProductController::class)->only(['index', 'show', 'destroy']);
     });
     Route::resource('settings' , SettingController::class)->only('edit','update');
     Route::post('update-password' , [SettingController::class,'updatePassword'])->name('update-password');
