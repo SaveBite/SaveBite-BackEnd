@@ -55,11 +55,10 @@ abstract class AuthService extends PlatformService
             if ($request->hasFile('image')) {
                 $credentials = $this->imageEncryptionService->extract('image', $request->email);
 
-                $token = auth('api')->attempt($credentials);
             } else {
                 $credentials = $request->only('email', 'password');
-                $token = auth('api')->attempt($credentials);
             }
+            $token = auth('api')->attempt($credentials);
 
 
             if ($token) {
@@ -75,7 +74,7 @@ abstract class AuthService extends PlatformService
 
             return $this->responseFail(status: 401, message: __('messages.wrong credentials'));
         } catch (Exception $e) {
-            $this->responseFail(503, $e->getMessage());
+            return $this->responseFail(503, $e->getMessage());
         }
 
     }

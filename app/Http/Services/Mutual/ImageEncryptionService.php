@@ -6,6 +6,7 @@ namespace App\Http\Services\Mutual;
 use App\Http\Traits\Responser;
 use App\Repository\EncodedImageRepositoryInterface;
 use Exception;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
@@ -90,7 +91,7 @@ class ImageEncryptionService
             ];
         }
 
-        catch (\Illuminate\Http\Client\ConnectionException $e) {
+        catch (ConnectionException $e) {
             throw new Exception("The image processing service is currently unavailable. Please try again later.");
         }
 
