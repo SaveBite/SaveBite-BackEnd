@@ -101,14 +101,24 @@ abstract class ProductService extends PlatformService
 
     public function salesPredictions()
     {
-        $predictions = AnalyticsPredictions::where('user_id', auth('api')->id())->orderBy('Date', 'ASC')->get();
+        $predictions = AnalyticsPredictions::where('user_id', auth('api')->id())
+            ->orderBy('Date', 'ASC')
+            ->get();
+
+        if ($predictions->isEmpty()) {
+            return $this->responseFail(message: 'No predictions found for this user.');
+        }
+
         $start_date = $predictions->first()->date;
         $end_date = $predictions->last()->date;
+
         $data = [
             'start_date' => $start_date,
             'end_date' => $end_date,
             'data' => SalesPredictionsResource::collection($predictions),
         ];
+
         return $this->responseSuccess(data: $data);
+
     }
 }
