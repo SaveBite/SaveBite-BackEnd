@@ -3,21 +3,28 @@
 
 namespace App\Http\Services\Mutual;
 
+use App\Http\Traits\Responser;
 use App\Repository\EncodedImageRepositoryInterface;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
 class ImageEncryptionService
 {
-    public function __construct(private readonly EncodedImageRepositoryInterface $encodedImageRepository){}
+    use Responser;
+
+    public function __construct(private readonly EncodedImageRepositoryInterface $encodedImageRepository)
+    {
+    }
 
     /**
      * embed user's data in image and save image
-     * @param mixed $requestAttributeName name of image field in the request
-     * @param mixed $email
-     * @param mixed $password
-     * @throws \Exception
+     * @param  mixed  $requestAttributeName  name of image field in the request
+     * @param  mixed  $email
+     * @param  mixed  $password
      * @return bool
+     * @throws Exception
      */
     public function embed(mixed $requestAttributeName, mixed $email, mixed $password): bool
     {
@@ -30,36 +37,38 @@ class ImageEncryptionService
             'image',
             file_get_contents(request()->file($requestAttributeName)->getRealPath()),
             request()->file($requestAttributeName)->getClientOriginalName(),
-        )->post(config('imageEncryptionApi.base_url') . '/embed/', $data);
+        )->post(config('imageEncryptionApi.base_url').'/embed/', $data);
 
 
-        if(! $response->successful())
-            throw new \Exception("Failed to send request to external api");
+        if (!$response->successful()) {
+            throw new Exception("Failed to send request to external api");
+        }
 
-        $responseImage = Http::get(config("imageEncryptionApi.base_url") . $response->json()['image_url']);
-        if(! $responseImage)
-            throw new \Exception("Failed to download Image");
+        $responseImage = Http::get(config("imageEncryptionApi.base_url").$response->json()['image_url']);
+        if (!$responseImage) {
+            throw new Exception("Failed to download Image");
+        }
 
 
         $content = $responseImage->body();
-        $imageName = "encImage_" . time() . ".png";
-        $path = "Users/SecPhotos/" . $imageName;
-        Storage::disk('public')->put($path,$content);
+        $imageName = "encImage_".time().".png";
+        $path = "Users/SecPhotos/".$imageName;
+        Storage::disk('public')->put($path, $content);
         $data = [
             'email' => $email,
             'image' => $path,
             'token' => $response->json()['fernet_key']
         ];
         $image = $this->encodedImageRepository->create($data);
-        return url("storage/" . $path);
+        return url("storage/".$path);
     }
 
     /**
      * extract the encrypted data from the image
-     * @param mixed $requestAttributeName name of image field in the request
-     * @param mixed $email
-     * @throws \Exception
-     * @return array email & password
+     * @param  mixed  $requestAttributeName  name of image field in the request
+     * @param  mixed  $email
+     * @return JsonResponse|array email & password
+     * @throws Exception
      */
     public function extract(mixed $requestAttributeName, mixed $email)
     {
@@ -72,26 +81,24 @@ class ImageEncryptionService
                     file_get_contents(request()->file($requestAttributeName)->getRealPath()),
                     request()->file($requestAttributeName)->getClientOriginalName()
                 )
-                ->post(config("imageEncryptionApi.base_url") . "/extract/", [
+                ->post(config("imageEncryptionApi.base_url")."/extract/", [
                     "fernet_key" => $key->token
                 ]);
 
-            if (! $response->successful()) {
-                throw new \Exception("Failed to send request to external API (status code: " . $response->status() . ")");
+            if (!$response->successful()) {
+                return $this->responseFail(message: "Failed to send request to external API");
             }
 
             return [
                 "email" => $response->json()['email'],
                 "password" => $response->json()['password'],
             ];
-        }
+        } catch (\Illuminate\Http\Client\ConnectionException $e) {
+            return $this->responseFail(message: "The image processing service is currently unavailable. Please try again later.");
 
-        catch (\Illuminate\Http\Client\ConnectionException $e) {
-            throw new \Exception("The image processing service is currently unavailable. Please try again later.");
-        }
+        } catch (Exception $e) {
+            return $this->responseFail(message: "Failed to send request to external API. Error: ".$e->getMessage());
 
-        catch (\Exception $e) {
-            throw new \Exception("Failed to send request to external API. Error: " . $e->getMessage());
         }
     }
 
