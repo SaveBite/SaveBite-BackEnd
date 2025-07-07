@@ -4,15 +4,21 @@ namespace App\Http\Controllers\Dashboard\Product;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\Dashboard\Product\ProductRequest;
+use App\Http\Services\Dashboard\Product\ProductService;
 
 class ProductController extends Controller
 {
+    public function __construct(private readonly ProductService $product)
+    {
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        return $this->product->index();
     }
 
     /**
@@ -20,23 +26,23 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return $this->product->create();
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        //
+        return $this->product->store($request);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        return $this->product->show($id);
     }
 
     /**
@@ -44,15 +50,15 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return $this->product->edit($id);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ProductRequest $request, string $id)
     {
-        //
+        return $this->product->update($request, $id);
     }
 
     /**
@@ -60,6 +66,6 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        return $this->product->destroy($id);
     }
 }

@@ -17,6 +17,9 @@ return [
             'roles' => 'c,r,u,d',  // Roles && assign permission
             'managers' => 'c,r,u,d',
             'profile' => 'r,u',
+            'products' => 'c,r,u,d',
+            'upcomingreorders' => 'c,r,u,d',
+            'trackingproducts' => 'c,r,u,d',
         ],
         'admin' => [
             'users' => 'r',
