@@ -23,7 +23,7 @@ abstract class TrackingProductService extends PlatformService
     {
         $perPage = request()->get('per_page', 10);
         $trackingProducts = $this->repository->getTrackingProducts($perPage);
-        return $this->responseSuccess(data: $trackingProducts);
+        return $this->responseSuccess(data: TrackingProductResource::collection($trackingProducts));
     }
 
     public function show($id)
@@ -68,7 +68,7 @@ abstract class TrackingProductService extends PlatformService
             $data['status'] = 'in-date';
         }
 
-
+        $data['user_id'] = auth('api')->id();
         $trackingProduct = $this->repository->create($data);
 
         return $this->responseSuccess(data: new TrackingProductResource($trackingProduct));
