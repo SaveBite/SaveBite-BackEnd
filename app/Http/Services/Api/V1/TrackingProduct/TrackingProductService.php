@@ -16,7 +16,7 @@ abstract class TrackingProductService extends PlatformService
 
     public function __construct(
         private readonly TrackingProductRepositoryInterface $repository,
-        private readonly FileManagerService $fileManagerService 
+        private readonly FileManagerService $fileManagerService
     ) {}
 
     public function index()
@@ -36,12 +36,12 @@ abstract class TrackingProductService extends PlatformService
     {
         $data = $request->validated();
 
-        
+
         if ($request->hasFile('image')) {
             $data['image'] = $this->fileManagerService->handle('image', 'tracking_products');
         }
         if (isset($data['start_date'])) {
-            $startDateRaw = $data['start_date']; 
+            $startDateRaw = $data['start_date'];
             $startDate = $this->normalizeDate($startDateRaw);
 
             if (!$startDate) {
@@ -50,7 +50,7 @@ abstract class TrackingProductService extends PlatformService
             $data['start_date'] = $startDate->format('Y-m-d');
         }
 
-        $endDateRaw = $data['end_date']; 
+        $endDateRaw = $data['end_date'];
         $endDate = $this->normalizeDate($endDateRaw);
 
         if (!$endDate) {
@@ -68,7 +68,7 @@ abstract class TrackingProductService extends PlatformService
             $data['status'] = 'in-date';
         }
 
-        
+
         $trackingProduct = $this->repository->create($data);
 
         return $this->responseSuccess(data: new TrackingProductResource($trackingProduct));
@@ -84,7 +84,7 @@ abstract class TrackingProductService extends PlatformService
         }
 
         if (isset($data['start_date'])) {
-            $startDateRaw = $data['start_date']; 
+            $startDateRaw = $data['start_date'];
             $startDate = $this->normalizeDate($startDateRaw);
 
             if (!$startDate) {
@@ -94,7 +94,7 @@ abstract class TrackingProductService extends PlatformService
         }
 
         if (isset($data['end_date'])) {
-            $endDateRaw = $data['end_date']; 
+            $endDateRaw = $data['end_date'];
             $endDate = $this->normalizeDate($endDateRaw);
 
             if (!$endDate) {
@@ -135,13 +135,14 @@ abstract class TrackingProductService extends PlatformService
     protected function normalizeDate(string $dateRaw): ?Carbon
     {
         $formats = [
-            'Y-m-d',    // Standard format
-            'Y/m/d',    // Standard format
-            'd-m-Y',    // Day-Month-Year
-            'd/m/Y',    // Day-Month-Year
-            'm-d-Y',    // Month-Day-Year
-            'M-y',      // Month-Year (e.g., May-23)
-            'm/y',      // Month/Year (e.g., 05/23)
+//            'Y-m-d',    // Standard format
+//            'Y/m/d',    // Standard format
+//            'd-m-Y',    // Day-Month-Year
+//            'd/m/Y',    // Day-Month-Year
+//            'm-d-Y',    // Month-Day-Year
+//            'M-y',      // Month-Year (e.g., May-23)
+//            'm/y',      // Month/Year (e.g., 05/23)
+            'd m Y' , // Day Month Year (e.g., 01 May 2023)
         ];
 
         foreach ($formats as $format) {
@@ -155,6 +156,6 @@ abstract class TrackingProductService extends PlatformService
             }
         }
 
-        return null; 
+        return null;
     }
 }
