@@ -6,12 +6,13 @@ trait FileManager
 {
     /**
      * Validates the file from the request & persists it into storage
-     * @param String $requestAttributeName from request
-     * @param String $folder
-     * @param String $disk
+     * @param  String|null  $requestAttributeName from request
+     * @param  String  $folder
+     * @param  String  $disk
      * @return String $path
      */
-    public function upload($requestAttributeName = null, $folder = '', $disk = 'public'){
+    public function upload(string $requestAttributeName = null, string $folder = '', string $disk = 'public'): ?string
+    {
         $path = null;
         if(request()->hasFile($requestAttributeName) && request()->file($requestAttributeName)->isValid()){
             $path = 'storage/'.request()->file($requestAttributeName)->store($folder, $disk);
@@ -21,12 +22,13 @@ trait FileManager
 
     /**
      * Validates the file from the request & persists it into storage then unlink old one
-     * @param String $requestAttributeName from request
-     * @param String $folder
-     * @param String $oldPath
+     * @param  String|null  $requestAttributeName from request
+     * @param  String  $folder
+     * @param  String  $oldPath
      * @return String $path
      */
-    public function updateFile($requestAttributeName = null, $folder = '',$oldPath){
+    public function updateFile( string $oldPath, string $requestAttributeName = null, string $folder = '',): ?string
+    {
         $path = null;
         if(request()->hasFile($requestAttributeName) && request()->file($requestAttributeName)->isValid()){
             $path = $this->upload($requestAttributeName,$folder);
@@ -39,10 +41,11 @@ trait FileManager
 
     /**
      * Delete the file from the path
-     * @param String $oldPath
+     * @param  String  $oldPath
      */
 
-    public function deleteFile($oldPath){
+    public function deleteFile(string $oldPath): void
+    {
         if(file_exists($oldPath)) {
             unlink($oldPath);
         }
