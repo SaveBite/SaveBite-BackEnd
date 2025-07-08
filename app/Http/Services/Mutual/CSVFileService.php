@@ -8,7 +8,8 @@ use Illuminate\Validation\ValidationException;
 class CSVFileService
 {
     use Responser;
-    public function store($file, $columns, $repository)
+
+    public function store($file, $columns, $repository): bool
     {
         $file = public_path($file);
         if (($handle = fopen($file, "r")) !== false) {
@@ -16,7 +17,7 @@ class CSVFileService
         }
         if ($headers === false || count(array_diff($columns, $headers)) !== 0) {
             fclose($handle);
-            throw ValidationException::withMessages(["message" => "file columns should be" . implode(", ", $columns)]);
+            throw ValidationException::withMessages(["message" => "file columns should be".implode(", ", $columns)]);
         }
         if (auth('api')->user()->products()->exists()) {
             auth('api')->user()->products()->delete();
